@@ -1,0 +1,35 @@
+{% extends 'partials/base.html'  %}
+{% load static %}
+
+{% block content %}
+    <section class="hero">
+        <h1>Bun venit venit la [Nume]!</h1>
+        <p>[Motto]</p>
+        <a href="#" class="btn">Vizualizare produse</a>
+    </section>
+
+    <section class="products">
+        <h2>Produse populare</h2>
+        <div class="product-list">
+            <div class="product">
+                <img src="https://via.placeholder.com/150" alt="Produs 1">
+                <h3>[Produs 1]</h3>
+                <p>[Descriere scurtă a produsului.]</p>
+                <span class="price">[00.00 u.m.]</span>
+            </div>
+            <div class="product">
+                <img src="https://via.placeholder.com/150" alt="Produs 2">
+                <h3>[Produs 2]</h3>
+                <p>[Descriere scurtă a produsului.]</p>
+                <span class="price">[00.00 u.m.]</span>
+            </div>
+            <div class="product">
+                <img src="https://via.placeholder.com/150" alt="Produs 3">
+                <h3>[Produs 3]</h3>
+                <p>[Descriere scurtă a produsului.]</p>
+                <span class="price">[00.00 u.m.]</span>
+            </div>
+        </div>
+    </section>
+
+    {% endblock content %}

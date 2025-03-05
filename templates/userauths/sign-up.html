@@ -1,0 +1,83 @@
+
+{% load static %}
+
+<!-- <form action="">
+    <input type="text" placeholder="e-mail...">
+    <input type="text" placeholder="username...">
+    <input type="password" placeholder="password...">
+    <input type="password" placeholder="confirm password">
+    <button>Inregistare</button>
+</form> -->
+
+<!-- {{form}} -->
+<!-- <form action="" method="POST">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button type="submit">Inregistrare</button>
+</form> -->
+<!-- {% if form.errors %}
+<div class="alert alert-danger">
+    <strong>{{ form.errors }}</strong>
+</div>
+{% endif %}
+<form action="" method="POST">
+    {% csrf_token %}
+    <div class = "form-group">
+        {{form.username}}
+    </div>
+    <div class = "form-group">
+        {{form.email}}
+    </div>
+    <div class = "form-group">
+        {{form.password1}}
+    </div>
+    <div class = "form-group">
+        {{form.password2}}
+    </div>
+    <button type="submit">Inregistrare</button>
+</form> -->
+<!-- <textarea name="" id="" cols="30" rows="10"></textarea> -->
+
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Înregistrare</title>
+    <link rel="stylesheet" href="{% static 'assets/css/styles.css' %}">
+</head>
+
+<section class="register">
+    <h2>Înregistrare</h2>
+
+    {% if form.errors %}
+    <div class="alert alert-danger">
+        <strong>{{ form.errors }}</strong>
+    </div>
+    {% endif %}
+
+    <form action="" method="POST">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="id_username">Nume de utilizator</label>
+            {{ form.username }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_email">E-mail</label>
+            {{ form.email }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_password1">Parolă</label>
+            {{ form.password1 }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_password2">Confirmare parolă</label>
+            {{ form.password2 }}
+        </div>
+
+        <button type="submit" class="btn">Înregistrare</button>
+    </form>
+</section>

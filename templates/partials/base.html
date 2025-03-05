@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[Nume]</title>
+    <link rel="stylesheet" href="{% static 'assets/css/styles.css' %}">
+    <!-- <link rel="stylesheet" href="static/assets/css/styles.css"> -->
+</head>
+<body>
+    <header>
+        <div class="logo">[Numele magazinului]</div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="#">Acasă</a></li>
+                <li><a href="#">Produse</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+            
+            <!-- COSUL DE CUMPĂRĂTURI -->
+            <div class="cart-user">
+                <a href="" class="cart">
+                    🛒 <span class="cart-count">0</span>
+                </a>
+    
+                <!-- AFIȘEAZĂ NUMELE UTILIZATORULUI AUTENTIFICAT -->
+                {% if user.is_authenticated %}
+                    <div class="user">
+                        <!-- 👤 {{ user.username }} -->
+                        {{ user.username }}
+                        <a href="" class="logout">🔓</a>
+                    </div>
+                {% else %}
+                    <a href="" class="login-btn">Login</a>
+                {% endif %}
+            </div>
+    
+            <!-- BUTON DROPDOWN PENTRU MENIU MOBIL -->
+            <div class="menu-toggle">&#9776;</div>
+        </nav>
+    </header>    
+
+{% block content %}
+
+{% endblock content %}
+
+<footer>
+    <p>&copy; 2025 heyitsmemariap. Toate drepturile rezervate.</p>
+</footer>
+
+<script src="{% static 'assets/js/script.js' %}"></script>
+</body>
+</html>
