@@ -44,6 +44,7 @@ INSTALLED_APPS = [
 
     # Custom apps
     'core', 
+    
 ]
 
 MIDDLEWARE = [
@@ -143,3 +144,5 @@ JAZZMIN_SETTINGS = {
     'site_logo' : "assets/imgs/theme/imagine.jpg",
     'copyright' : "heyitsmemariap",
 }
+
+AUTH_USER_MODEL = "userauths.User"
