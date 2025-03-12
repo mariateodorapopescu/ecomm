@@ -20,12 +20,16 @@ from django.urls import path, include
 from django.conf import settings # it accesses settings.py from upper
 from django.conf.urls.static import static
 
-# from core.views import index
+from core.views import index, category_detail, category_list
 urlpatterns = [
     path('admin/', admin.site.urls),
     # path("", index)
     path("", include("core.urls")),
     path("user/", include("userauths.urls")),    
+    path('', include('core.urls')),
+    path('', index, name='index'),
+    path('categories/', category_list, name='category_list'),  # Verifică acest nume
+path('category/<str:category_id>/', category_detail, name='category_detail'),
 ]
 
 # all thr static files are stored in teh static directory in root directory

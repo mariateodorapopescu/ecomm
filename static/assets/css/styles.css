@@ -224,7 +224,70 @@ button.btn:hover {
 
 /* ICON PENTRU EROARE */
 .alert-danger::before {
+    content: "⛔"; /* Emoji de avertizare */
+    font-size: 18px;
+}
+
+/* ALERTĂ DE EROARE */
+.alert-error {
+    background: #ffeded;
+    color: #d8000c;
+    border-left: 5px solid #d8000c;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* ICON PENTRU EROARE */
+.alert-error::before {
+    content: "⛔"; /* Emoji de avertizare */
+    font-size: 18px;
+}
+
+/* ALERTĂ DE EROARE */
+.alert-warning {
+    background: #fffecb;
+    color: #d8bf00;
+    border-left: 5px solid #d8bf00;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* ICON PENTRU EROARE */
+.alert-warning::before {
     content: "⚠️"; /* Emoji de avertizare */
     font-size: 18px;
 }
 
+
+/* ALERTĂ DE EROARE */
+.alert-success {
+    background: #d1ffcb;
+    color: #16d800;
+    border-left: 5px solid #16d800;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* ICON PENTRU EROARE */
+.alert-success::before {
+    content: "✅"; /* Emoji de avertizare */
+    font-size: 18px;
+}

@@ -1,0 +1,264 @@
+{% extends 'partials/base.html'  %}
+{% load static %}
+
+{% block content %}
+<section class="categories-header">
+    <div class="container">
+        <h1>Categorii de produse</h1>
+        <p>Explorează colecția noastră vastă de produse organizate pe categorii</p>
+        
+        <nav class="breadcrumb">
+            <a href="{% url 'core:index' %}">Acasă</a>
+            <span class="separator">/</span>
+            <span class="current">Categorii</span>
+        </nav>
+    </div>
+</section>
+
+<section class="categories-container">
+    <div class="container">
+        {% if categories %}
+            <div class="categories-grid">
+                {% for category in categories %}
+                <a href="{% url 'core:category_detail' category.cid %}" class="category-card">
+                    <div class="category-image">
+                        <img src="{% if category.image %}{{ category.image.url }}{% else %}{% static 'img/placeholder.jpg' %}{% endif %}" alt="{{ category.title }}">
+                    </div>
+                    <div class="category-content">
+                        <h2>{{ category.title }}</h2>
+                        <div class="category-overlay">
+                            <span class="btn-explore">Explorează</span>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-categories">
+                <div class="no-categories-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                </div>
+                <h3>Nu există categorii disponibile în acest moment</h3>
+                <p>Reveniți mai târziu pentru a vedea colecția noastră de categorii</p>
+                <a href="{% url 'core:index' %}" class="back-home">Înapoi la pagina principală</a>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<style>
+    /* Stiluri generale */
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    /* Header secțiune */
+    .categories-header {
+        background: linear-gradient(135deg, #FFF8E1 0%, #FFECB3 100%);
+        padding: 50px 0 30px;
+        margin-bottom: 40px;
+    }
+
+    .categories-header h1 {
+        font-size: 36px;
+        color: #e55b00;
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+
+    .categories-header p {
+        font-size: 18px;
+        color: #666;
+        max-width: 600px;
+        margin: 0 auto 20px;
+    }
+    
+    .breadcrumb {
+        margin-bottom: 15px;
+        color: #777;
+        font-size: 14px;
+    }
+    
+    .breadcrumb a {
+        color: #555;
+        text-decoration: none;
+    }
+    
+    .breadcrumb a:hover {
+        color: #e55b00;
+    }
+    
+    .breadcrumb .separator {
+        margin: 0 8px;
+    }
+    
+    .breadcrumb .current {
+        color: #e55b00;
+        font-weight: 500;
+    }
+
+    /* Grid pentru categorii */
+    .categories-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+        margin-bottom: 60px;
+    }
+
+    /* Card categorie */
+    .category-card {
+        display: block;
+        text-decoration: none;
+        background-color: #fff;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+
+    .category-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    }
+
+    .category-image {
+        height: 220px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .category-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .category-card:hover .category-image img {
+        transform: scale(1.1);
+    }
+
+    .category-content {
+        padding: 20px;
+        position: relative;
+        text-align: center;
+    }
+
+    .category-content h2 {
+        font-size: 22px;
+        color: #333;
+        margin: 0;
+        transition: color 0.3s ease;
+    }
+
+    .category-card:hover .category-content h2 {
+        color: #e55b00;
+    }
+
+    .category-overlay {
+        position: absolute;
+        bottom: -50px;
+        left: 0;
+        right: 0;
+        text-align: center;
+        transition: bottom 0.3s ease, opacity 0.3s ease;
+        opacity: 0;
+    }
+
+    .category-card:hover .category-overlay {
+        bottom: 20px;
+        opacity: 1;
+    }
+
+    .btn-explore {
+        display: inline-block;
+        background-color: #e55b00;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 25px;
+        font-weight: 500;
+        box-shadow: 0 4px 10px rgba(229, 91, 0, 0.3);
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-explore:hover {
+        background-color: #333;
+    }
+
+    /* Stil pentru nicio categorie */
+    .no-categories {
+        text-align: center;
+        padding: 60px 0;
+        background-color: #f9f9f9;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .no-categories-icon {
+        margin-bottom: 20px;
+        color: #aaa;
+    }
+
+    .no-categories h3 {
+        font-size: 24px;
+        color: #555;
+        margin-bottom: 15px;
+    }
+
+    .no-categories p {
+        color: #888;
+        max-width: 500px;
+        margin: 0 auto 20px;
+    }
+    
+    .back-home {
+        display: inline-block;
+        background-color: #e55b00;
+        color: white;
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 25px;
+        transition: background-color 0.2s;
+    }
+    
+    .back-home:hover {
+        background-color: #d45400;
+    }
+
+    /* Responsive design */
+    @media (max-width: 992px) {
+        .categories-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .categories-header {
+            padding: 40px 0 25px;
+        }
+        
+        .categories-header h1 {
+            font-size: 30px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .categories-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .category-image {
+            height: 180px;
+        }
+        
+        .categories-header h1 {
+            font-size: 24px;
+        }
+        
+        .categories-header p {
+            font-size: 16px;
+        }
+    }
+</style>
+{% endblock content %}

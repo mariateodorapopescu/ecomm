@@ -13,8 +13,8 @@
         <div class="logo">[Numele magazinului]</div>
         <nav>
             <ul class="nav-links">
-                <li><a href="#">Acasă</a></li>
-                <li><a href="#">Produse</a></li>
+                <li><a href="{% url 'core:index' %}">Acasa</a></li>
+                <li><a href="{% url 'core:product-list' %}">Produse</a></li>
                 <li><a href="#">Contact</a></li>
             </ul>
             
@@ -29,17 +29,23 @@
                     <div class="user">
                         <!-- 👤 {{ user.username }} -->
                         {{ user.username }}
-                        <a href="" class="logout">🔓</a>
+                        <a href="{% url 'userauths:sign-out' %}" class="logout">🔓</a>
                     </div>
                 {% else %}
-                    <a href="" class="login-btn">Login</a>
+                    <a href="{% url 'userauths:sign-in' %}" class="login-btn">🚀</a>
                 {% endif %}
             </div>
     
             <!-- BUTON DROPDOWN PENTRU MENIU MOBIL -->
             <div class="menu-toggle">&#9776;</div>
         </nav>
+       
     </header>    
+    {% if messages %}
+        {%  for i in messages %}
+            <div class="alert alert-{{i.tags}}"><strong>{{i}}</strong></div>
+        {% endfor %}
+    {% endif %}
 
 {% block content %}
 
@@ -50,5 +56,141 @@
 </footer>
 
 <script src="{% static 'assets/js/script.js' %}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<!-- <script src="https:://code.jquery.com/jquery-3.5.1.min.js"></script> -->
+<script>
+    setTimeout(() => {
+        $(".alert").fadeOut(500, function() {
+            $(this).remove();
+        });
+    }, 3000);
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize cart count on page load
+        updateCartCount();
+        
+        // Add event listeners to all "Add to cart" buttons
+        const addToCartButtons = document.querySelectorAll('.add-to-cart');
+        addToCartButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const productCard = this.closest('.product-card');
+                const productId = productCard.getAttribute('data-product-id');
+                
+                addToCart(productId);
+            });
+        });
+        
+        // Function to add product to cart
+        function addToCart(productId) {
+            // Get CSRF token
+            const csrftoken = getCookie('csrftoken');
+            
+            // Create form data
+            const formData = new FormData();
+            formData.append('product_id', productId);
+            formData.append('action', 'add');
+            
+            // Make AJAX request
+            fetch('{% url "core:cart-action" %}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update cart count
+                    updateCartBadge(data.cart_count);
+                    
+                    // Show success notification
+                    showNotification(data.message, 'success');
+                } else {
+                    // Show error notification
+                    showNotification('Eroare: ' + data.message, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Eroare:', error);
+                showNotification('A apărut o eroare. Vă rugăm să încercați din nou.', 'error');
+            });
+        }
+        
+        // Function to update cart count from server
+        function updateCartCount() {
+            fetch('{% url "core:get-cart-count" %}')
+            .then(response => response.json())
+            .then(data => {
+                updateCartBadge(data.cart_count);
+            })
+            .catch(error => {
+                console.error('Eroare la obținerea numărului de produse din coș:', error);
+            });
+        }
+        
+        // Function to update cart badge in UI
+        function updateCartBadge(count) {
+            const cartCount = document.querySelector('.cart-count');
+            if (cartCount) {
+                cartCount.textContent = count;
+                
+                // Optionally add some animation
+                cartCount.classList.add('cart-updated');
+                setTimeout(() => {
+                    cartCount.classList.remove('cart-updated');
+                }, 500);
+            }
+        }
+        
+        // Function to get cookie by name (for CSRF token)
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    });
+    </script>
+    <style>
+        /* Cart styles */
+        .cart {
+            position: relative;
+            text-decoration: none;
+            font-size: 1.2rem;
+            color: #333;
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: #e55b00;
+            color: white;
+            font-size: 12px;
+            min-width: 20px;
+            height: 20px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+        }
+        
+        .cart-updated {
+            transform: scale(1.3);
+        }
+    </style>
 </body>
 </html>

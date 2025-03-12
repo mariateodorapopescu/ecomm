@@ -54,7 +54,12 @@
         <strong>{{ form.errors }}</strong>
     </div>
     {% endif %}
-
+    {% if messages %}
+        {%  for i in messages %}
+            <div class="alert alert-{{i.tags}}"><strong>{{i}}</strong></div>
+        {% endfor %}
+    {% endif %}
+    <p>Aveti deja cont?<br> Foarte bine! <br><strong><a href="{% url 'userauths:sign-in' %}">Conectati-va!</a></strong></p>
     <form action="" method="POST">
         {% csrf_token %}
         
@@ -81,3 +86,12 @@
         <button type="submit" class="btn">Înregistrare</button>
     </form>
 </section>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<!-- <script src="https:://code.jquery.com/jquery-3.5.1.min.js"></script> -->
+<script>
+    setTimeout(() => {
+        $(".alert").fadeOut(500, function() {
+            $(this).remove();
+        });
+    }, 3000);
+</script>

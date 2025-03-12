@@ -6,3 +6,6 @@ document.addEventListener("DOMContentLoaded", function () {
         navLinks.classList.toggle("active");
     });
 });
+setTimeout(() => {
+    $(".alert").alert("close");
+},3000)
