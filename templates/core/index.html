@@ -293,6 +293,111 @@
         padding: 50px 0;
     }
     
+    /* View all */
+    .view-all-container {
+        text-align: center;
+        margin-top: 20px;
+    }
+    
+    .btn-view-all {
+        display: inline-block;
+        background-color: transparent;
+        color: #e55b00;
+        border: 2px solid #e55b00;
+        padding: 10px 25px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-view-all:hover {
+        background-color: #e55b00;
+        color: white;
+    }
+    
+    /* Categories section */
+    .categories-section {
+        padding: 50px 0;
+        background-color: #f8f9fa;
+    }
+    
+    .categories-preview {
+        text-align: center;
+        padding: 30px;
+    }
+    
+    /* Responsive design */
+    @media (max-width: 992px) {        
+        .hero-banner h1 {
+            font-size: 36px;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .hero-banner {
+            padding: 50px 0;
+        }
+        
+        .hero-banner h1 {
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            font-size: 16px;
+        }
+    }
+
+    /* Stiluri generale */
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+    
+    /* Header produse */
+    .products-header {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        padding: 50px 0 30px;
+        margin-bottom: 30px;
+    }
+    
+    .products-header h1 {
+        font-size: 36px;
+        color: #333;
+        margin: 0 0 10px 0;
+    }
+    
+    .products-header p {
+        font-size: 18px;
+        color: #666;
+        margin-bottom: 20px;
+    }
+    
+    .breadcrumb {
+        margin-bottom: 15px;
+        color: #777;
+        font-size: 14px;
+    }
+    
+    .breadcrumb a {
+        color: #555;
+        text-decoration: none;
+    }
+    
+    .breadcrumb a:hover {
+        color: #e55b00;
+    }
+    
+    .breadcrumb .separator {
+        margin: 0 8px;
+    }
+    
+    .breadcrumb .current {
+        color: #e55b00;
+        font-weight: 500;
+    }
+    
     /* Controale filtru */
     .filter-controls {
         display: flex;
@@ -341,13 +446,6 @@
     
     .filter-toggle:hover {
         background-color: #e2e2e2;
-    }
-    
-    /* Container grid cu filtre și produse */
-    .products-grid-container {
-        display: grid;
-        grid-template-columns: 250px 1fr;
-        gap: 30px;
     }
     
     /* Sidebar filtre */
@@ -484,52 +582,26 @@
         color: #333;
     }
     
-    /* Informații rezultate căutare */
-    .search-results-info {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-        padding-bottom: 10px;
-        border-bottom: 1px solid #eee;
-    }
-    
-    .search-results-info p {
-        margin: 0;
-        color: #666;
-    }
-    
-    .clear-filters {
-        color: #e55b00;
-        text-decoration: none;
-        font-size: 14px;
-    }
-    
-    .clear-filters:hover {
-        text-decoration: underline;
-    }
-    
     /* Grid produse */
     .products-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 20px;
-        margin-bottom: 40px;
     }
     
     /* Card produs */
     .product-card {
         position: relative;
         background-color: white;
-        border-radius: 12px;
+        border-radius: 8px;
         overflow: hidden;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        box-shadow: 0 3px 10px rgba(0,0,0,0.05);
         transition: transform 0.3s, box-shadow 0.3s;
     }
     
     .product-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
     }
     
     .product-badge {
@@ -579,6 +651,166 @@
         color: white;
     }
     
+    .product-image {
+        display: block;
+        height: 200px;
+    }
+    
+    .product-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .product-info {
+        padding: 15px;
+    }
+    
+    .product-category {
+        font-size: 12px;
+        color: #777;
+        margin-bottom: 5px;
+    }
+    
+    .product-title {
+        margin: 0 0 10px 0;
+        font-size: 16px;
+        line-height: 1.3;
+    }
+    
+    .product-title a {
+        color: #333;
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+    
+    .product-title a:hover {
+        color: #e55b00;
+    }
+    
+    .product-vendor {
+        font-size: 12px;
+        color: #666;
+        margin-bottom: 10px;
+    }
+    
+    .product-price {
+        margin-bottom: 10px;
+    }
+    
+    .regular-price {
+        color: #999;
+        text-decoration: line-through;
+        font-size: 14px;
+        margin-right: 8px;
+    }
+    
+    .current-price {
+        color: #e55b00;
+        font-size: 18px;
+        font-weight: 700;
+    }
+    
+    .product-status {
+        margin-bottom: 12px;
+        font-size: 13px;
+    }
+    
+    .in-stock {
+        color: #27ae60;
+    }
+    
+    .out-of-stock {
+        color: #e74c3c;
+    }
+    
+    /* Fără produse */
+    .no-products {
+        grid-column: 1 / -1;
+        padding: 40px;
+        text-align: center;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+    }
+    
+    .no-products-icon {
+        margin-bottom: 20px;
+        color: #aaa;
+    }
+    
+    .no-products h3 {
+        font-size: 20px;
+        color: #555;
+        margin-bottom: 10px;
+    }
+    
+    .no-products p {
+        color: #777;
+        margin-bottom: 20px;
+    }
+    
+    /* Responsive */
+    @media (max-width: 992px) {
+        .products-grid-container {
+            grid-template-columns: 1fr;
+        }
+        
+        .filters-sidebar {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 280px;
+            height: 100%;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+        }
+        
+        .products-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .products-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .products-header h1 {
+            font-size: 28px;
+        }
+        
+        .products-header p {
+            font-size: 16px;
+        }
+    }
+
+    .search-results-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .search-results-info p {
+        margin: 0;
+        color: #666;
+    }
+    
+    .clear-filters {
+        color: #e55b00;
+        text-decoration: none;
+        font-size: 14px;
+    }
+    
+    .clear-filters:hover {
+        text-decoration: underline;
+    }
+
+    /* Wishlist Styles */
     .wishlist-btn {
         background-color: white;
         border: none;
@@ -604,189 +836,22 @@
         color: #e55b00;
     }
     
-    .product-image {
-        display: block;
-        height: 220px;
-    }
-    
-    .product-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-    
-    .product-info {
-        padding: 20px;
-    }
-    
-    .product-category {
-        font-size: 12px;
-        color: #777;
-        margin-bottom: 5px;
-    }
-    
-    .product-title {
-        margin: 0 0 10px 0;
-        font-size: 18px;
-        line-height: 1.3;
-    }
-    
-    .product-title a {
-        color: #333;
-        text-decoration: none;
-        transition: color 0.2s;
-    }
-    
-    .product-title a:hover {
-        color: #e55b00;
-    }
-    
-    .product-vendor {
-        font-size: 12px;
-        color: #666;
-        margin-bottom: 12px;
-    }
-    
-    .product-price {
-        margin-bottom: 12px;
-    }
-    
-    .regular-price {
-        color: #999;
-        text-decoration: line-through;
-        font-size: 14px;
-        margin-right: 8px;
-    }
-    
-    .current-price {
-        color: #e55b00;
-        font-size: 20px;
-        font-weight: 700;
-    }
-    
-    .product-status {
-        margin-bottom: 15px;
-        font-size: 14px;
-    }
-    
-    .in-stock {
-        color: #27ae60;
-    }
-    
-    .out-of-stock {
-        color: #e74c3c;
-    }
-    
-    .add-to-cart {
-        width: 100%;
-        display: flex;
+    /* Stiluri pentru contorul de wishlist din header */
+    .wishlist-counter {
+        display: inline-flex;
         align-items: center;
         justify-content: center;
+        position: absolute;
+        top: -8px;
+        right: -8px;
         background-color: #e55b00;
         color: white;
-        border: none;
-        padding: 12px;
-        border-radius: 6px;
-        font-weight: 500;
-        cursor: pointer;
-        transition: background-color 0.2s;
-    }
-    
-    .add-to-cart svg {
-        margin-right: 8px;
-    }
-    
-    .add-to-cart:hover {
-        background-color: #d45400;
-    }
-    
-    /* No products */
-    .no-products {
-        grid-column: 1 / -1;
-        padding: 50px;
-        text-align: center;
-        background-color: #f9f9f9;
-        border-radius: 12px;
-    }
-    
-    .no-products-icon {
-        margin-bottom: 20px;
-        color: #aaa;
-    }
-    
-    .no-products h3 {
-        font-size: 22px;
-        color: #555;
-        margin-bottom: 10px;
-    }
-    
-    .no-products p {
-        color: #777;
-        max-width: 500px;
-        margin: 0 auto;
-    }
-    
-    /* Paginare */
-    .pagination {
-        display: flex;
-        justify-content: center;
-        margin-top: 40px;
-        gap: 5px;
-    }
-    
-    .page-link {
-        display: inline-block;
-        padding: 8px 12px;
-        background-color: white;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        color: #555;
-        text-decoration: none;
-        transition: all 0.2s;
-    }
-    
-    .page-link:hover {
-        background-color: #f5f5f5;
-    }
-    
-    .page-link.active {
-        background-color: #e55b00;
-        border-color: #e55b00;
-        color: white;
-    }
-    
-    /* View all */
-    .view-all-container {
-        text-align: center;
-        margin-top: 20px;
-    }
-    
-    .btn-view-all {
-        display: inline-block;
-        background-color: transparent;
-        color: #e55b00;
-        border: 2px solid #e55b00;
-        padding: 10px 25px;
-        border-radius: 30px;
-        text-decoration: none;
-        font-weight: 600;
-        transition: all 0.3s ease;
-    }
-    
-    .btn-view-all:hover {
-        background-color: #e55b00;
-        color: white;
-    }
-    
-    /* Categories section */
-    .categories-section {
-        padding: 50px 0;
-        background-color: #f8f9fa;
-    }
-    
-    .categories-preview {
-        text-align: center;
-        padding: 30px;
+        font-size: 10px;
+        min-width: 18px;
+        height: 18px;
+        border-radius: 9px;
+        font-weight: bold;
+        padding: 0 5px;
     }
     
     /* Stiluri pentru notificări */
@@ -821,163 +886,380 @@
     .notification.warning {
         border-left: 4px solid #FFC107;
     }
-    
-    /* Responsive design */
-    @media (max-width: 992px) {
-        .products-grid-container {
-            grid-template-columns: 1fr;
-        }
-        
-        .filters-sidebar {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 280px;
-            height: 100%;
-            overflow-y: auto;
-            z-index: 1000;
-            box-shadow: 0 0 20px rgba(0,0,0,0.2);
-        }
-        
-        .products-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-        
-        .hero-banner h1 {
-            font-size: 36px;
-        }
+
+    /* Cart Styles */
+    .cart {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .cart-count {
+        position: absolute;
+        top: -8px;
+        right: -12px;
+        min-width: 18px;
+        height: 18px;
+        background-color: #e55b00;
+        color: white;
+        border-radius: 50%;
+        font-size: 12px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 4px;
+        transition: transform 0.2s ease;
+    }
+
+    .cart-updated {
+        transform: scale(1.5);
+        color: #e55b00;
     }
     
-    @media (max-width: 576px) {
-        .products-grid {
-            grid-template-columns: 1fr;
-        }
-        
-        .hero-banner {
-            padding: 50px 0;
-        }
-        
-        .hero-banner h1 {
-            font-size: 28px;
-        }
-        
-        .subtitle {
-            font-size: 16px;
-        }
+    .cart-actions {
+        width: 100%;
+    }
+    
+    .add-to-cart {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #e55b00;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 4px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.2s, transform 0.1s;
+    }
+    
+    .add-to-cart svg {
+        margin-right: 8px;
+    }
+    
+    .add-to-cart:hover {
+        background-color: #d45400;
+    }
+
+    .add-to-cart:active {
+        transform: scale(0.98);
+    }
+    
+    .quantity-controls {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: white;
+        border: 2px solid #e55b00;
+        border-radius: 6px;
+        padding: 6px 10px;
+        width: 100%;
+    }
+    
+    .quantity-btn {
+        background-color: transparent;
+        border: none;
+        color: #e55b00;
+        cursor: pointer;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.2s;
+        border-radius: 4px;
+    }
+    
+    .quantity-btn:hover {
+        background-color: #ffebee;
+    }
+    
+    .quantity {
+        font-weight: bold;
+        color: #333;
+        padding: 0 12px;
+        min-width: 30px;
+        text-align: center;
+    }
+    
+    /* Fade transition between add-to-cart and quantity controls */
+    .add-to-cart, .quantity-controls {
+        transition: opacity 0.3s, transform 0.3s;
+    }
+    
+    .fade-out {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+    
+    .fade-in {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Pagination */
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 40px;
+        gap: 5px;
+    }
+    
+    .page-link {
+        display: inline-block;
+        padding: 8px 12px;
+        background-color: white;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        color: #555;
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+    
+    .page-link:hover {
+        background-color: #f5f5f5;
+    }
+    
+    .page-link.active {
+        background-color: #e55b00;
+        border-color: #e55b00;
+        color: white;
     }
 </style>
-<style>
-    /* Notifications for add to cart feedback */
-    .cart-notification {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background-color: white;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        border-radius: 6px;
-        padding: 12px 20px;
-        max-width: 300px;
-        z-index: 1000;
-        transform: translateY(100px);
-        opacity: 0;
-        transition: transform 0.3s ease, opacity 0.3s ease;
-    }
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log("Shop functionality initializing...");
     
-    .cart-notification.show {
-        transform: translateY(0);
-        opacity: 1;
-    }
-    
-    .cart-notification.success {
-        border-left: 4px solid #4CAF50;
-    }
-    
-    .cart-notification.error {
-        border-left: 4px solid #f44336;
-    }
-    </style>
-    <style>
-        .cart-actions {
-            width: 100%;
-        }
+        // ==========================================
+        // INITIALIZATION
+        // ==========================================
         
-        .quantity-controls {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: white;
-            border: 2px solid #e55b00;
-            border-radius: 6px;
-            padding: 6px 10px;
-            width: 100%;
-        }
+        // Initialize all shop functionality
+        initializeShop();
         
-        .quantity-btn {
-            background-color: transparent;
-            border: none;
-            color: #e55b00;
-            cursor: pointer;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background-color 0.2s;
-            border-radius: 4px;
-        }
-        
-        .quantity-btn:hover {
-            background-color: #ffebee;
-        }
-        
-        .quantity {
-            font-weight: bold;
-            color: #333;
-            padding: 0 12px;
-            min-width: 30px;
-            text-align: center;
-        }
-        
-        /* Fade transition between add-to-cart and quantity controls */
-        .add-to-cart, .quantity-controls {
-            transition: opacity 0.3s, transform 0.3s;
-        }
-        
-        .fade-out {
-            opacity: 0;
-            transform: translateY(5px);
-        }
-        
-        .fade-in {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        </style>
-        
-        <!-- Add this JavaScript to handle the quantity controls -->
-        <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize quantities from cart data
-            initializeQuantities();
+        function initializeShop() {
+            // Initialize price slider
+            initializePriceSlider();
             
-            // Add event listeners to all "Add to cart" buttons
+            // Initialize filter toggle for mobile
+            initializeFilterToggle();
+            
+            // Initialize wishlist
+            initializeWishlist();
+            
+            // Initialize cart
+            initializeCart();
+        }
+        
+        // ==========================================
+        // PRICE RANGE SLIDER
+        // ==========================================
+        
+        function initializePriceSlider() {
+            const priceSlider = document.getElementById('price-range');
+            const priceValue = document.getElementById('price-value');
+            
+            if (priceSlider && priceValue) {
+                priceSlider.addEventListener('input', function() {
+                    priceValue.textContent = this.value + ' RON';
+                });
+            }
+        }
+        
+        // ==========================================
+        // FILTER TOGGLE (MOBILE)
+        // ==========================================
+        
+        function initializeFilterToggle() {
+            const filterToggle = document.getElementById('filter-toggle');
+            const filtersSidebar = document.getElementById('filters-sidebar');
+            
+            if (filterToggle && filtersSidebar) {
+                filterToggle.addEventListener('click', function() {
+                    filtersSidebar.style.display = filtersSidebar.style.display === 'block' ? 'none' : 'block';
+                });
+                
+                // Adjust for screen resize
+                window.addEventListener('resize', function() {
+                    if (window.innerWidth > 992) {
+                        filtersSidebar.style.display = 'block';
+                    }
+                });
+            }
+        }
+        
+        // ==========================================
+        // SORTING FUNCTIONALITY
+        // ==========================================
+        
+        // Function for updating sorting
+        window.updateSort = function(value) {
+            const sortInput = document.getElementById('sort-input');
+            if (sortInput) {
+                sortInput.value = value;
+                document.getElementById('filter-form').submit();
+            }
+        };
+        
+        // ==========================================
+        // WISHLIST FUNCTIONALITY
+        // ==========================================
+        
+        function initializeWishlist() {
+            console.log("Initializing wishlist functionality...");
+            
+            // Load existing wishlist items
+            fetchWishlist();
+            
+            // Add click handlers to wishlist buttons
+            const wishlistButtons = document.querySelectorAll('.wishlist-btn');
+            wishlistButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    {% if user.is_authenticated %}
+                        const productCard = this.closest('.product-card');
+                        const productId = productCard.getAttribute('data-product-id');
+                        toggleWishlist(productId, this);
+                    {% else %}
+                        showLoginMessage();
+                    {% endif %}
+                });
+            });
+        }
+        
+        // Function to add/remove from wishlist
+        function toggleWishlist(productId, button) {
+            console.log("Toggle wishlist for product:", productId);
+            
+            // Get CSRF token
+            const csrftoken = getCookie('csrftoken');
+            
+            // Create form data
+            const formData = new FormData();
+            formData.append('product_id', productId);
+            
+            // Make AJAX request
+            fetch('{% url "core:toggle-wishlist" %}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update button appearance
+                    if (data.added) {
+                        button.classList.add('in-wishlist');
+                        button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>';
+                    } else {
+                        button.classList.remove('in-wishlist');
+                        button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>';
+                    }
+                    
+                    // Show confirmation message
+                    showNotification(data.message);
+                    
+                    // Update wishlist counter if exists
+                    updateWishlistCounter();
+                } else {
+                    // Show error message
+                    showNotification('Eroare: ' + data.message, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error toggling wishlist:', error);
+                showNotification('A apărut o eroare. Vă rugăm să încercați din nou.', 'error');
+            });
+        }
+        
+        // Function to load existing wishlist items
+        function fetchWishlist() {
+            {% if user.is_authenticated %}
+                fetch('{% url "core:get-wishlist" %}')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Mark all wishlist products with filled heart icon
+                        data.products.forEach(product => {
+                            const productCards = document.querySelectorAll(`.product-card[data-product-id="${product.pid}"]`);
+                            productCards.forEach(card => {
+                                const wishlistBtn = card.querySelector('.wishlist-btn');
+                                if (wishlistBtn) {
+                                    wishlistBtn.classList.add('in-wishlist');
+                                    wishlistBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>';
+                                }
+                            });
+                        });
+                        
+                        // Update wishlist counter
+                        const wishlistCounter = document.querySelector('.wishlist-counter');
+                        if (wishlistCounter) {
+                            wishlistCounter.textContent = data.count;
+                            wishlistCounter.style.display = data.count > 0 ? 'inline-flex' : 'none';
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching wishlist:', error);
+                });
+            {% endif %}
+        }
+        
+        // Function to update wishlist counter in header
+        function updateWishlistCounter() {
+            {% if user.is_authenticated %}
+                fetch('{% url "core:get-wishlist" %}')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const wishlistCounter = document.querySelector('.wishlist-counter');
+                        if (wishlistCounter) {
+                            wishlistCounter.textContent = data.count;
+                            wishlistCounter.style.display = data.count > 0 ? 'inline-flex' : 'none';
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating wishlist counter:', error);
+                });
+            {% endif %}
+        }
+        
+        // ==========================================
+        // CART FUNCTIONALITY
+        // ==========================================
+        
+        function initializeCart() {
+            console.log("Initializing cart functionality...");
+            
+            // Load cart count and show quantity controls for items already in cart
+            loadCartData();
+            
+            // Add click handlers to "Add to cart" buttons
             const addToCartButtons = document.querySelectorAll('.add-to-cart');
             addToCartButtons.forEach(button => {
                 button.addEventListener('click', function(e) {
                     e.preventDefault();
                     
-                    const productCard = this.closest('.product-card');
                     const productId = this.getAttribute('data-product-id');
+                    console.log("Add to cart clicked for product ID:", productId);
                     
-                    // Add to cart and show quantity controls
+                    // Add to cart
                     addToCart(productId, 1, this);
                 });
             });
             
-            // Add event listeners to quantity buttons
+            // Add click handlers to quantity increase buttons
             document.querySelectorAll('.quantity-btn.increase').forEach(button => {
-                button.addEventListener('click', function() {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
                     const controls = this.closest('.quantity-controls');
                     const productId = controls.getAttribute('data-product-id');
                     const quantityElement = controls.querySelector('.quantity');
@@ -992,8 +1274,11 @@
                 });
             });
             
+            // Add click handlers to quantity decrease buttons
             document.querySelectorAll('.quantity-btn.decrease').forEach(button => {
-                button.addEventListener('click', function() {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
                     const controls = this.closest('.quantity-controls');
                     const productId = controls.getAttribute('data-product-id');
                     const quantityElement = controls.querySelector('.quantity');
@@ -1003,7 +1288,7 @@
                     quantity--;
                     
                     if (quantity <= 0) {
-                        // If quantity is 0 or less, remove item from cart and show add button
+                        // If quantity reaches zero, remove item from cart
                         removeFromCart(productId, controls);
                     } else {
                         // Update quantity display
@@ -1014,290 +1299,106 @@
                     }
                 });
             });
-            
-            // Function to add product to cart
-            function addToCart(productId, quantity, addButton) {
-                // Get CSRF token
-                const csrftoken = getCookie('csrftoken');
-                
-                // Create form data
-                const formData = new FormData();
-                formData.append('product_id', productId);
-                formData.append('action', 'add');
-                formData.append('quantity', quantity);
-                
-                // Make AJAX request
-                fetch('{% url "core:cart-action" %}', {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRFToken': csrftoken
-                    },
-                    body: formData
-                })
+        }
+        
+        // Function to load cart data
+        function loadCartData() {
+            // Load cart count for badge
+            fetch('{% url "core:get-cart-count" %}')
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Update cart count
                         updateCartBadge(data.cart_count);
-                        
-                        // Show quantity controls
-                        showQuantityControls(productId, data.item_quantity);
-                        
-                        // Show success notification
-                        showNotification(data.message, 'success');
-                    } else {
-                        // Show error notification
-                        showNotification('Eroare: ' + data.message, 'error');
                     }
                 })
                 .catch(error => {
-                    console.error('Eroare:', error);
-                    showNotification('A apărut o eroare. Vă rugăm să încercați din nou.', 'error');
+                    console.error('Error loading cart count:', error);
                 });
-            }
             
-            // Function to update cart quantity
-            function updateCartQuantity(productId, quantity) {
-                // Get CSRF token
-                const csrftoken = getCookie('csrftoken');
-                
-                // Create form data
-                const formData = new FormData();
-                formData.append('product_id', productId);
-                formData.append('action', 'update');
-                formData.append('quantity', quantity);
-                
-                // Make AJAX request
-                fetch('{% url "core:cart-action" %}', {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRFToken': csrftoken
-                    },
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // Update cart count
-                        updateCartBadge(data.cart_count);
-                        
-                        // Show success notification
-                        showNotification(data.message, 'success');
-                    } else {
-                        // Show error notification
-                        showNotification('Eroare: ' + data.message, 'error');
-                    }
-                })
-                .catch(error => {
-                    console.error('Eroare:', error);
-                    showNotification('A apărut o eroare. Vă rugăm să încercați din nou.', 'error');
-                });
-            }
-            
-            // Function to remove item from cart
-            function removeFromCart(productId, controls) {
-                // Get CSRF token
-                const csrftoken = getCookie('csrftoken');
-                
-                // Create form data
-                const formData = new FormData();
-                formData.append('product_id', productId);
-                formData.append('action', 'remove');
-                
-                // Make AJAX request
-                fetch('{% url "core:cart-action" %}', {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRFToken': csrftoken
-                    },
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // Update cart count
-                        updateCartBadge(data.cart_count);
-                        
-                        // Show add to cart button
-                        hideQuantityControls(productId);
-                        
-                        // Show success notification
-                        showNotification(data.message, 'success');
-                    } else {
-                        // Show error notification
-                        showNotification('Eroare: ' + data.message, 'error');
-                    }
-                })
-                .catch(error => {
-                    console.error('Eroare:', error);
-                    showNotification('A apărut o eroare. Vă rugăm să încercați din nou.', 'error');
-                });
-            }
-            
-            // Function to initialize quantities from cart
-            function initializeQuantities() {
-                fetch('{% url "core:get-cart-items" %}')
+            // Load cart items and show quantity controls
+            fetch('{% url "core:get-cart-items" %}')
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
                         // For each item in the cart, show quantity controls
                         data.cart_items.forEach(item => {
-                            showQuantityControls(item.product_id, item.quantity);
+                            if (item.product_id) {
+                                console.log("Setting up quantity controls for product:", item.product_id, "quantity:", item.quantity);
+                                showQuantityControls(item.product_id, item.quantity);
+                            }
                         });
                     }
                 })
                 .catch(error => {
-                    console.error('Eroare la obținerea produselor din coș:', error);
+                    console.error('Error loading cart items:', error);
                 });
-            }
-            
-            // Function to show quantity controls
-            function showQuantityControls(productId, quantity) {
-                // Find all product cards with this ID (might appear multiple times on page)
-                document.querySelectorAll(`.product-card[data-product-id="${productId}"]`).forEach(card => {
-                    const addButton = card.querySelector('.add-to-cart');
-                    const quantityControls = card.querySelector('.quantity-controls');
-                    
-                    if (addButton && quantityControls) {
-                        // Update quantity display
-                        const quantityElement = quantityControls.querySelector('.quantity');
-                        if (quantityElement) {
-                            quantityElement.textContent = quantity;
-                        }
-                        
-                        // Hide add button with fade
-                        addButton.classList.add('fade-out');
-                        setTimeout(() => {
-                            addButton.style.display = 'none';
-                            
-                            // Show quantity controls with fade
-                            quantityControls.style.display = 'flex';
-                            setTimeout(() => {
-                                quantityControls.classList.add('fade-in');
-                            }, 10);
-                        }, 300);
-                    }
-                });
-            }
-            
-            // Function to hide quantity controls and show add button
-            function hideQuantityControls(productId) {
-                // Find all product cards with this ID
-                document.querySelectorAll(`.product-card[data-product-id="${productId}"]`).forEach(card => {
-                    const addButton = card.querySelector('.add-to-cart');
-                    const quantityControls = card.querySelector('.quantity-controls');
-                    
-                    if (addButton && quantityControls) {
-                        // Hide quantity controls with fade
-                        quantityControls.classList.remove('fade-in');
-                        setTimeout(() => {
-                            quantityControls.style.display = 'none';
-                            
-                            // Show add button with fade
-                            addButton.style.display = 'block';
-                            setTimeout(() => {
-                                addButton.classList.remove('fade-out');
-                            }, 10);
-                        }, 300);
-                    }
-                });
-            }
-        });
-        </script>
-    <!-- Show notification function, add this to base.html or to individual pages -->
-    <script>
-    // Function for showing cart notifications
-    function showCartNotification(message, type = 'success') {
-        // Check if notification container exists, create if not
-        let notificationContainer = document.querySelector('.cart-notification-container');
-        if (!notificationContainer) {
-            notificationContainer = document.createElement('div');
-            notificationContainer.className = 'cart-notification-container';
-            document.body.appendChild(notificationContainer);
         }
         
-        // Create the notification element
-        const notification = document.createElement('div');
-        notification.className = `cart-notification ${type}`;
-        notification.innerText = message;
-        
-        // Add to container
-        notificationContainer.appendChild(notification);
-        
-        // Show with animation
-        setTimeout(() => {
-            notification.classList.add('show');
-        }, 10);
-        
-        // Remove after delay
-        setTimeout(() => {
-            notification.classList.remove('show');
-            setTimeout(() => {
-                notification.remove();
-            }, 300);
-        }, 3000);
-    }
-    </script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Funcționalitate pentru slider-ul de preț
-        const priceSlider = document.getElementById('price-range');
-        const priceValue = document.getElementById('price-value');
-        
-        priceSlider.addEventListener('input', function() {
-            priceValue.textContent = this.value + ' RON';
-        });
-        
-        // Funcționalitate pentru filtru toggle pe mobile
-        const filterToggle = document.getElementById('filter-toggle');
-        const filtersSidebar = document.getElementById('filters-sidebar');
-        
-        filterToggle.addEventListener('click', function() {
-            filtersSidebar.style.display = filtersSidebar.style.display === 'block' ? 'none' : 'block';
-        });
-        
-        // Reajustare pentru ecrane mari când fereastra este redimensionată
-        window.addEventListener('resize', function() {
-            if (window.innerWidth > 992) {
-                filtersSidebar.style.display = 'block';
-            }
-        });
-        
-        // Selectăm toate butoanele de wishlist
-        const wishlistButtons = document.querySelectorAll('.wishlist-btn');
-        
-        // Obținem lista de produse favorite pentru a marca produsele deja adăugate
-        fetchWishlist();
-        
-        // Adăugăm event listener pentru fiecare buton
-        wishlistButtons.forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                // Verificăm dacă utilizatorul este autentificat
-                {% if user.is_authenticated %}
-                    const productCard = this.closest('.product-card');
-                    const productId = productCard.getAttribute('data-product-id');
-                    
-                    toggleWishlist(productId, this);
-                {% else %}
-                    // Redirectăm la pagina de login sau afișăm un mesaj
-                    showLoginMessage();
-                {% endif %}
-            });
-        });
-        
-        // Funcția pentru a adăuga/elimina un produs din wishlist
-        function toggleWishlist(productId, button) {
-            // Obținem token-ul CSRF pentru solicitările POST
+        // Function to add product to cart
+        function addToCart(productId, quantity, button) {
+            console.log("Adding to cart:", productId, "quantity:", quantity);
+            
+            // Get CSRF token
             const csrftoken = getCookie('csrftoken');
             
-            // Construim datele pentru cerere
+            // Create form data
             const formData = new FormData();
             formData.append('product_id', productId);
+            formData.append('action', 'add');
+            formData.append('quantity', quantity);
             
-            // Facem solicitarea AJAX
-            fetch('{% url "core:toggle-wishlist" %}', {
+            // Make AJAX request
+            fetch('{% url "core:cart-action" %}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken
+                },
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Server error: ' + response.status);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    console.log("Add to cart success:", data);
+                    
+                    // Update cart count
+                    updateCartBadge(data.cart_count);
+                    
+                    // Show quantity controls
+                    showQuantityControls(productId, data.item_quantity || 1);
+                    
+                    // Show success notification
+                    showNotification(data.message, 'success');
+                } else {
+                    console.error("Add to cart error:", data.message);
+                    showNotification('Eroare: ' + data.message, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error adding to cart:', error);
+                showNotification('A apărut o eroare. Vă rugăm să încercați din nou.', 'error');
+            });
+        }
+        
+        // Function to update cart quantity
+        function updateCartQuantity(productId, quantity) {
+            console.log("Updating cart quantity:", productId, "quantity:", quantity);
+            
+            // Get CSRF token
+            const csrftoken = getCookie('csrftoken');
+            
+            // Create form data
+            const formData = new FormData();
+            formData.append('product_id', productId);
+            formData.append('action', 'update');
+            formData.append('quantity', quantity);
+            
+            // Make AJAX request
+            fetch('{% url "core:cart-action" %}', {
                 method: 'POST',
                 headers: {
                     'X-CSRFToken': csrftoken
@@ -1307,86 +1408,154 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // Actualizăm aspectul butonului
-                    if (data.added) {
-                        button.classList.add('in-wishlist');
-                        button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>';
-                    } else {
-                        button.classList.remove('in-wishlist');
-                        button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>';
-                    }
+                    // Update cart count
+                    updateCartBadge(data.cart_count);
                     
-                    // Afișăm un mesaj de confirmare
-                    showNotification(data.message);
-                    
-                    // Actualizăm contorul din header (dacă există)
-                    updateWishlistCounter();
+                    // Show success notification
+                    showNotification(data.message, 'success');
                 } else {
-                    // Afișăm mesaj de eroare
+                    // Show error notification
                     showNotification('Eroare: ' + data.message, 'error');
                 }
             })
             .catch(error => {
-                console.error('Eroare:', error);
+                console.error('Error updating cart:', error);
                 showNotification('A apărut o eroare. Vă rugăm să încercați din nou.', 'error');
             });
         }
         
-        // Funcție pentru a obține lista de dorințe
-        function fetchWishlist() {
-            {% if user.is_authenticated %}
-                fetch('{% url "core:get-wishlist" %}')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // Marcăm produsele care sunt deja în lista de dorințe
-                        data.products.forEach(product => {
-                            // Selectează produsele după pid
-                            const productCards = document.querySelectorAll(`.product-card[data-product-id="${product.pid}"]`);
-                            
-                            productCards.forEach(card => {
-                                const wishlistBtn = card.querySelector('.wishlist-btn');
-                                if (wishlistBtn) {
-                                    wishlistBtn.classList.add('in-wishlist');
-                                    wishlistBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>';
-                                }
-                            });
-                        });
-                        
-                        // Actualizăm contorul din header (dacă există)
-                        const wishlistCounter = document.querySelector('.wishlist-counter');
-                        if (wishlistCounter) {
-                            wishlistCounter.textContent = data.count;
-                            if (data.count > 0) {
-                                wishlistCounter.style.display = 'inline-flex';
-                            } else {
-                                wishlistCounter.style.display = 'none';
-                            }
-                        }
-                    }
-                })
-                .catch(error => {
-                    console.error('Eroare la obținerea listei de dorințe:', error);
-                });
-            {% endif %}
+        // Function to remove item from cart
+        function removeFromCart(productId, controls) {
+            console.log("Removing from cart:", productId);
+            
+            // Get CSRF token
+            const csrftoken = getCookie('csrftoken');
+            
+            // Create form data
+            const formData = new FormData();
+            formData.append('product_id', productId);
+            formData.append('action', 'remove');
+            
+            // Make AJAX request
+            fetch('{% url "core:cart-action" %}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update cart count
+                    updateCartBadge(data.cart_count);
+                    
+                    // Show add to cart button
+                    hideQuantityControls(productId);
+                    
+                    // Show success notification
+                    showNotification(data.message, 'success');
+                } else {
+                    // Show error notification
+                    showNotification('Eroare: ' + data.message, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error removing from cart:', error);
+                showNotification('A apărut o eroare. Vă rugăm să încercați din nou.', 'error');
+            });
         }
         
-        // Funcție pentru a afișa notificări
+        // Function to show quantity controls
+        function showQuantityControls(productId, quantity) {
+            console.log("Showing quantity controls for:", productId, "quantity:", quantity);
+            
+            // Find all product cards with this ID (might appear multiple times on page)
+            document.querySelectorAll(`.product-card[data-product-id="${productId}"]`).forEach(card => {
+                const addButton = card.querySelector('.add-to-cart');
+                const quantityControls = card.querySelector('.quantity-controls');
+                
+                if (addButton && quantityControls) {
+                    // Update quantity display
+                    const quantityElement = quantityControls.querySelector('.quantity');
+                    if (quantityElement) {
+                        quantityElement.textContent = quantity;
+                    }
+                    
+                    // Hide add button with fade effect
+                    addButton.classList.add('fade-out');
+                    setTimeout(() => {
+                        addButton.style.display = 'none';
+                        
+                        // Show quantity controls with fade effect
+                        quantityControls.style.display = 'flex';
+                        setTimeout(() => {
+                            quantityControls.classList.add('fade-in');
+                        }, 10);
+                    }, 300);
+                }
+            });
+        }
+        
+        // Function to hide quantity controls and show add button
+        function hideQuantityControls(productId) {
+            console.log("Hiding quantity controls for:", productId);
+            
+            // Find all product cards with this ID
+            document.querySelectorAll(`.product-card[data-product-id="${productId}"]`).forEach(card => {
+                const addButton = card.querySelector('.add-to-cart');
+                const quantityControls = card.querySelector('.quantity-controls');
+                
+                if (addButton && quantityControls) {
+                    // Hide quantity controls with fade effect
+                    quantityControls.classList.remove('fade-in');
+                    setTimeout(() => {
+                        quantityControls.style.display = 'none';
+                        
+                        // Show add button with fade effect
+                        addButton.style.display = 'block';
+                        setTimeout(() => {
+                            addButton.classList.remove('fade-out');
+                        }, 10);
+                    }, 300);
+                }
+            });
+        }
+        
+        // Function to update cart count in header
+        function updateCartBadge(count) {
+            const cartCount = document.querySelector('.cart-count');
+            if (cartCount) {
+                cartCount.textContent = count;
+                
+                // Add animation effect
+                cartCount.classList.add('cart-updated');
+                setTimeout(() => {
+                    cartCount.classList.remove('cart-updated');
+                }, 500);
+            }
+        }
+        
+        // ==========================================
+        // UTILITY FUNCTIONS
+        // ==========================================
+        
+        // Function to show notification
         function showNotification(message, type = 'success') {
-            // Creăm elementul de notificare
+            // Create notification element
             const notification = document.createElement('div');
             notification.className = `notification ${type}`;
             notification.innerText = message;
             
-            // Adăugăm notificarea în DOM
+            // Add to DOM
             document.body.appendChild(notification);
             
-            // Afișăm notificarea cu animație
+            // Show with animation
             setTimeout(() => {
                 notification.classList.add('show');
             }, 10);
             
-            // Ștergem notificarea după 3 secunde
+            // Remove after delay
             setTimeout(() => {
                 notification.classList.remove('show');
                 setTimeout(() => {
@@ -1395,39 +1564,17 @@
             }, 3000);
         }
         
-        // Funcție pentru a afișa mesajul de login
+        // Function to show login message for non-authenticated users
         function showLoginMessage() {
             showNotification('Trebuie să fiți autentificat pentru a adăuga produse la favorite.', 'warning');
             
-            // Opțional: redirecționare către pagina de login după o scurtă întârziere
+            // Optional redirect to login page
             setTimeout(() => {
                 window.location.href = '{% url "userauths:sign-in" %}?next={{ request.path }}';
             }, 2000);
         }
         
-        // Funcție pentru a actualiza contorul de wishlist din header
-        function updateWishlistCounter() {
-            fetch('{% url "core:get-wishlist" %}')
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    const wishlistCounter = document.querySelector('.wishlist-counter');
-                    if (wishlistCounter) {
-                        wishlistCounter.textContent = data.count;
-                        if (data.count > 0) {
-                            wishlistCounter.style.display = 'inline-flex';
-                        } else {
-                            wishlistCounter.style.display = 'none';
-                        }
-                    }
-                }
-            })
-            .catch(error => {
-                console.error('Eroare la actualizarea contorului:', error);
-            });
-        }
-        
-        // Funcție pentru a obține un cookie (pentru CSRF token)
+        // Function to get CSRF token
         function getCookie(name) {
             let cookieValue = null;
             if (document.cookie && document.cookie !== '') {
@@ -1443,5 +1590,5 @@
             return cookieValue;
         }
     });
-</script>
+    </script>
 {% endblock content %}
