@@ -1,0 +1,193 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Coșul meu{% endblock %}
+
+{% block extra_css %}
+<style>
+  .cart-item {
+    border-bottom: 1px solid #eee;
+    padding: 15px 0;
+  }
+  
+  .cart-item-image {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+  }
+  
+  .qty-control {
+    display: flex;
+    align-items: center;
+  }
+  
+  .qty-input {
+    width: 50px;
+    text-align: center;
+    border: 1px solid #ddd;
+    padding: 5px;
+    margin: 0 5px;
+  }
+  
+  .qty-btn {
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  
+  .qty-btn:hover {
+    background: #eee;
+  }
+  
+  .remove-btn {
+    color: #dc3545;
+    text-decoration: none;
+    font-size: 18px;
+  }
+  
+  .cart-summary {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 5px;
+  }
+  
+  .cart-total-row {
+    font-weight: bold;
+    border-top: 1px solid #ddd;
+    margin-top: 10px;
+    padding-top: 10px;
+  }
+  
+  .empty-cart-message {
+    text-align: center;
+    padding: 50px 0;
+    font-size: 18px;
+    color: #666;
+  }
+  
+  /* Stiluri pentru notificări */
+  .notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    background-color: #28a745;
+    color: white;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    z-index: 1000;
+  }
+  
+  .notification.error {
+    background-color: #dc3545;
+  }
+  
+  .notification.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .cart-item {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    
+    .cart-item-info {
+      width: 100%;
+      margin-top: 10px;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <h1 class="mb-4">Coșul meu</h1>
+  
+  {% csrf_token %}
+  
+  <div class="row">
+    <div class="col-lg-8">
+      {% if cart_items %}
+        <div class="cart-items-container">
+          {% for item in cart_items %}
+            <div class="cart-item" data-product-id="{{ item.product.pid }}">
+              <div class="row align-items-center">
+                <div class="col-md-2 col-4">
+                  <img src="{{ item.image }}" alt="{{ item.item }}" class="cart-item-image">
+                </div>
+                
+                <div class="col-md-4 col-8">
+                  <h5>{{ item.item }}</h5>
+                  <p class="text-muted">{{ item.price }} RON</p>
+                </div>
+                
+                <div class="col-md-3 col-6 mt-3 mt-md-0">
+                  <div class="qty-control">
+                    <button class="qty-btn" data-product-id="{{ item.product.pid }}" data-action="decrease">-</button>
+                    <input type="number" class="qty-input" data-product-id="{{ item.product.pid }}" value="{{ item.qty }}" min="1">
+                    <button class="qty-btn" data-product-id="{{ item.product.pid }}" data-action="increase">+</button>
+                  </div>
+                </div>
+                
+                <div class="col-md-2 col-4 mt-3 mt-md-0 text-end">
+                  <span class="cart-item-subtotal" data-product-id="{{ item.product.pid }}" data-price="{{ item.price }}">
+                    {{ item.total }} RON
+                  </span>
+                </div>
+                
+                <div class="col-md-1 col-2 mt-3 mt-md-0 text-end">
+                  <a href="#" class="remove-from-cart-btn" data-product-id="{{ item.product.pid }}">
+                    <i class="fas fa-trash-alt remove-btn"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="empty-cart-message">Coșul tău este gol</div>
+      {% endif %}
+    </div>
+    
+    <div class="col-lg-4 mt-4 mt-lg-0">
+      <div class="cart-summary">
+        <h4 class="mb-4">Sumar comandă</h4>
+        
+        <div class="d-flex justify-content-between mb-2">
+          <span>Subtotal:</span>
+          <span class="cart-subtotal">{{ subtotal }} RON</span>
+        </div>
+        
+        <div class="d-flex justify-content-between mb-2">
+          <span>Livrare:</span>
+          <span class="cart-shipping" data-value="{{ shipping }}">{{ shipping }} RON</span>
+        </div>
+        
+        <div class="d-flex justify-content-between cart-total-row">
+          <span>Total:</span>
+          <span class="cart-total">{{ total }} RON</span>
+        </div>
+        
+        <button class="btn btn-primary w-100 mt-4" {% if not cart_items %}disabled{% endif %}>
+          Finalizează comanda
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/cart.js' %}"></script>
+{% endblock %}

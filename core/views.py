@@ -470,177 +470,150 @@ def get_cart_count(request):
         'cart_count': cart_count
     })
 
-# @login_required
-# def cart_action(request):
-#     """Add, remove, or update cart items"""
-#     if request.method == 'POST':
-#         product_id = request.POST.get('product_id')
-#         action = request.POST.get('action', 'add')
-        
-#         try:
-#             product = Product.objects.get(pid=product_id)
-            
-#             # Get or create cart order
-#             cart_order, created = CartOrder.objects.get_or_create(
-#                 user=request.user,
-#                 paid_status=False
-#             )
-            
-#             if action == 'add':
-#                 # Check if item already in cart
-#                 try:
-#                     cart_item = CartOrderItems.objects.get(
-#                         order=cart_order,
-#                         item=product.title
-#                     )
-#                     # Item exists, increment quantity
-#                     cart_item.qty += 1
-#                     cart_item.total = cart_item.qty * float(cart_item.price)
-#                     cart_item.save()
-#                     message = f"{product.title} cantitate actualizată în coș"
-#                 except CartOrderItems.DoesNotExist:
-#                     # Item doesn't exist, create new
-#                     cart_item = CartOrderItems.objects.create(
-#                         order=cart_order,
-#                         invoice_no=f"INV-{cart_order.id}",
-#                         item=product.title,
-#                         image=product.image.url,
-#                         price=product.price,
-#                         qty=1,
-#                         total=product.price
-#                     )
-#                     message = f"{product.title} adăugat în coș"
-            
-#             elif action == 'remove':
-#                 # Remove item from cart
-#                 try:
-#                     cart_item = CartOrderItems.objects.get(
-#                         order=cart_order,
-#                         item=product.title
-#                     )
-#                     cart_item.delete()
-#                     message = f"{product.title} șters din coș"
-#                 except CartOrderItems.DoesNotExist:
-#                     message = "Produsul nu există în coș"
-            
-#             # Update order total price
-#             cart_order.price = sum(float(item.total) for item in CartOrderItems.objects.filter(order=cart_order))
-#             cart_order.save()
-            
-#             # Get updated cart count
-#             cart_count = sum(item.qty for item in CartOrderItems.objects.filter(order=cart_order))
-            
-#             return JsonResponse({
-#                 'success': True,
-#                 'message': message,
-#                 'cart_count': cart_count
-#             })
-            
-#         except Product.DoesNotExist:
-#             return JsonResponse({
-#                 'success': False,
-#                 'message': 'Produsul nu a fost găsit'
-#             })
-    
-#     return JsonResponse({
-#         'success': False,
-#         'message': 'Metoda nepermisă'
-#     })
-
 @login_required
 def cart_action(request):
     """Add, remove, or update cart items"""
-    if request.method == 'POST':
+    if request.method != 'POST':
+        return JsonResponse({
+            'success': False,
+            'message': 'Metodă nepermisă'
+        }, status=405)
+        
+    try:
+        # Extragere date din request
         product_id = request.POST.get('product_id')
         action = request.POST.get('action', 'add')
         quantity = int(request.POST.get('quantity', 1))
         
+        if not product_id:
+            return JsonResponse({
+                'success': False,
+                'message': 'ID produs lipsă'
+            }, status=400)
+            
+        # Verifică dacă produsul există
         try:
             product = Product.objects.get(pid=product_id)
-            
-            # Get or create cart order
-            cart_order, created = CartOrder.objects.get_or_create(
-                user=request.user,
-                paid_status=False
-            )
-            
-            if action == 'add' or action == 'update':
-                # Check if item already in cart
-                try:
-                    cart_item = CartOrderItems.objects.get(
-                        order=cart_order,
-                        item=product.title
-                    )
-                    
-                    if action == 'update':
-                        # Update quantity directly
-                        cart_item.qty = quantity
-                    else:
-                        # Increment quantity
-                        cart_item.qty += quantity
-                        
-                    cart_item.total = cart_item.qty * float(cart_item.price)
-                    cart_item.save()
-                    message = f"{product.title} cantitate actualizată în coș"
-                except CartOrderItems.DoesNotExist:
-                    # Item doesn't exist, create new
-                    cart_item = CartOrderItems.objects.create(
-                        order=cart_order,
-                        invoice_no=f"INV-{cart_order.id}",
-                        item=product.title,
-                        image=product.image.url,
-                        price=product.price,
-                        qty=quantity,
-                        total=product.price * quantity
-                    )
-                    message = f"{product.title} adăugat în coș"
-            
-            elif action == 'remove':
-                # Remove item from cart
-                try:
-                    cart_item = CartOrderItems.objects.get(
-                        order=cart_order,
-                        item=product.title
-                    )
-                    cart_item.delete()
-                    message = f"{product.title} șters din coș"
-                except CartOrderItems.DoesNotExist:
-                    message = "Produsul nu există în coș"
-            
-            # Update order total price
-            cart_items = CartOrderItems.objects.filter(order=cart_order)
-            cart_order.price = sum(float(item.total) for item in cart_items)
-            cart_order.save()
-            
-            # Get updated cart count
-            cart_count = sum(item.qty for item in cart_items)
-            
-            # Get item quantity for the updated/added item
-            item_quantity = 0
-            try:
-                if action != 'remove':
-                    item = CartOrderItems.objects.get(order=cart_order, item=product.title)
-                    item_quantity = item.qty
-            except CartOrderItems.DoesNotExist:
-                pass
-                
-            return JsonResponse({
-                'success': True,
-                'message': message,
-                'cart_count': cart_count,
-                'item_quantity': item_quantity
-            })
-            
         except Product.DoesNotExist:
             return JsonResponse({
                 'success': False,
                 'message': 'Produsul nu a fost găsit'
-            })
-    
-    return JsonResponse({
-        'success': False,
-        'message': 'Metoda nepermisă'
-    })
+            }, status=404)
+            
+        # Verifică dacă cantitatea este validă
+        if quantity <= 0 and action != 'remove':
+            return JsonResponse({
+                'success': False,
+                'message': 'Cantitatea trebuie să fie un număr pozitiv'
+            }, status=400)
+            
+        # Obține sau creează comanda de coș
+        cart_order, created = CartOrder.objects.get_or_create(
+            user=request.user,
+            paid_status=False
+        )
+        
+        # Caută articolul în coș
+        try:
+            cart_item = CartOrderItems.objects.get(
+                order=cart_order,
+                item=product.title
+            )
+            item_exists = True
+        except CartOrderItems.DoesNotExist:
+            item_exists = False
+            cart_item = None
+            
+        # Procesează acțiunea
+        if action == 'add':
+            if item_exists:
+                # Actualizează cantitatea
+                cart_item.qty += quantity
+                cart_item.total = cart_item.qty * float(cart_item.price)
+                cart_item.save()
+                message = f"{product.title} - cantitate actualizată în coș"
+            else:
+                # Creează un articol nou
+                cart_item = CartOrderItems.objects.create(
+                    order=cart_order,
+                    invoice_no=f"INV-{cart_order.id}",
+                    item=product.title,
+                    image=product.image.url if product.image else '',
+                    price=product.price,
+                    qty=quantity,
+                    total=product.price * quantity
+                )
+                message = f"{product.title} adăugat în coș"
+                
+        elif action == 'update':
+            if item_exists:
+                # Actualizează direct cantitatea
+                cart_item.qty = quantity
+                cart_item.total = cart_item.qty * float(cart_item.price)
+                cart_item.save()
+                message = f"{product.title} - cantitate actualizată în coș"
+            else:
+                # Creează un articol nou dacă nu există
+                cart_item = CartOrderItems.objects.create(
+                    order=cart_order,
+                    invoice_no=f"INV-{cart_order.id}",
+                    item=product.title,
+                    image=product.image.url if product.image else '',
+                    price=product.price,
+                    qty=quantity,
+                    total=product.price * quantity
+                )
+                message = f"{product.title} adăugat în coș"
+                
+        elif action == 'remove':
+            if item_exists:
+                # Șterge articolul din coș
+                cart_item.delete()
+                message = f"{product.title} șters din coș"
+            else:
+                return JsonResponse({
+                    'success': False,
+                    'message': "Produsul nu există în coș"
+                }, status=404)
+        else:
+            return JsonResponse({
+                'success': False,
+                'message': "Acțiune nevalidă"
+            }, status=400)
+            
+        # Actualizează prețul total al comenzii
+        cart_items = CartOrderItems.objects.filter(order=cart_order)
+        cart_order.price = sum(float(item.total) for item in cart_items)
+        cart_order.save()
+        
+        # Obține numărul actualizat de articole din coș
+        cart_count = sum(item.qty for item in cart_items)
+        
+        # Obține cantitatea articolului pentru articolul actualizat/adăugat
+        item_quantity = 0
+        if action != 'remove' and cart_item:
+            item_quantity = cart_item.qty
+            
+        return JsonResponse({
+            'success': True,
+            'message': message,
+            'cart_count': cart_count,
+            'item_quantity': item_quantity,
+            'subtotal': float(cart_order.price)
+        })
+        
+    except ValueError as e:
+        # Tratează erorile de conversie a cantității
+        return JsonResponse({
+            'success': False,
+            'message': f'Eroare de format: {str(e)}'
+        }, status=400)
+    except Exception as e:
+        # Tratează alte erori neprevăzute
+        return JsonResponse({
+            'success': False,
+            'message': f'Eroare: {str(e)}'
+        }, status=500)
 
 def get_cart_items(request):
     """Get all items in the user's cart"""

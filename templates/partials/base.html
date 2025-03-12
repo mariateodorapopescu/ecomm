@@ -549,5 +549,281 @@ footer {
     }
 }
     </style>
+    <script>
+        // Adaugă în fișierul static JavaScript pentru funcționalitatea coșului
+// Exemplu: cart.js
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Funcție pentru a actualiza contorul de articole din coș
+    function updateCartCounter(count) {
+        const cartCounterElements = document.querySelectorAll('.cart-counter');
+        cartCounterElements.forEach(element => {
+            element.textContent = count;
+            
+            // Arată/ascunde contorul în funcție de număr
+            if (count > 0) {
+                element.classList.remove('hidden');
+            } else {
+                element.classList.add('hidden');
+            }
+        });
+    }
+    
+    // Funcție pentru a afișa mesaje de notificare
+    function showNotification(message, type = 'success') {
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.textContent = message;
+        
+        document.body.appendChild(notification);
+        
+        // Animație de intrare
+        setTimeout(() => {
+            notification.classList.add('show');
+        }, 10);
+        
+        // Dispariție automată după 3 secunde
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => {
+                notification.remove();
+            }, 300);
+        }, 3000);
+    }
+    
+    // Funcție pentru adăugarea în coș
+    function addToCart(productId, quantity = 1) {
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        
+        const formData = new FormData();
+        formData.append('product_id', productId);
+        formData.append('action', 'add');
+        formData.append('quantity', quantity);
+        
+        fetch('/cart/action/', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRFToken': csrfToken
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showNotification(data.message);
+                updateCartCounter(data.cart_count);
+                
+                // Actualizează cantitatea afișată dacă există
+                const qtyElement = document.querySelector(`.cart-item-qty[data-product-id="${productId}"]`);
+                if (qtyElement) {
+                    qtyElement.textContent = data.item_quantity;
+                }
+            } else {
+                showNotification(data.message, 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showNotification('A apărut o eroare la adăugarea în coș', 'error');
+        });
+    }
+    
+    // Funcție pentru actualizarea cantității
+    function updateCartItem(productId, quantity) {
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        
+        const formData = new FormData();
+        formData.append('product_id', productId);
+        formData.append('action', 'update');
+        formData.append('quantity', quantity);
+        
+        fetch('/cart/action/', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRFToken': csrfToken
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showNotification(data.message);
+                updateCartCounter(data.cart_count);
+                
+                // Actualizează subtotalul articolului
+                const subtotalElement = document.querySelector(`.cart-item-subtotal[data-product-id="${productId}"]`);
+                if (subtotalElement) {
+                    const price = parseFloat(subtotalElement.getAttribute('data-price'));
+                    subtotalElement.textContent = (price * quantity).toFixed(2) + ' RON';
+                }
+                
+                // Actualizează subtotalul coșului
+                const cartSubtotalElement = document.querySelector('.cart-subtotal');
+                if (cartSubtotalElement && data.subtotal) {
+                    cartSubtotalElement.textContent = data.subtotal.toFixed(2) + ' RON';
+                    
+                    // Actualizează și totalul (subtotal + livrare)
+                    const shippingElement = document.querySelector('.cart-shipping');
+                    const totalElement = document.querySelector('.cart-total');
+                    
+                    if (shippingElement && totalElement) {
+                        const shipping = parseFloat(shippingElement.getAttribute('data-value'));
+                        totalElement.textContent = (data.subtotal + shipping).toFixed(2) + ' RON';
+                    }
+                }
+            } else {
+                showNotification(data.message, 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showNotification('A apărut o eroare la actualizarea coșului', 'error');
+        });
+    }
+    
+    // Funcție pentru eliminarea din coș
+    function removeFromCart(productId) {
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        
+        const formData = new FormData();
+        formData.append('product_id', productId);
+        formData.append('action', 'remove');
+        
+        fetch('/cart/action/', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRFToken': csrfToken
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showNotification(data.message);
+                updateCartCounter(data.cart_count);
+                
+                // Eliminați elementul din DOM
+                const cartItemElement = document.querySelector(`.cart-item[data-product-id="${productId}"]`);
+                if (cartItemElement) {
+                    cartItemElement.remove();
+                }
+                
+                // Verifică dacă coșul este gol
+                if (data.cart_count === 0) {
+                    const cartItemsContainer = document.querySelector('.cart-items-container');
+                    const emptyCartMessage = document.createElement('div');
+                    emptyCartMessage.className = 'empty-cart-message';
+                    emptyCartMessage.textContent = 'Coșul tău este gol';
+                    
+                    if (cartItemsContainer) {
+                        cartItemsContainer.innerHTML = '';
+                        cartItemsContainer.appendChild(emptyCartMessage);
+                    }
+                }
+                
+                // Actualizează subtotalul coșului
+                const cartSubtotalElement = document.querySelector('.cart-subtotal');
+                if (cartSubtotalElement && data.subtotal !== undefined) {
+                    cartSubtotalElement.textContent = data.subtotal.toFixed(2) + ' RON';
+                    
+                    // Actualizează și totalul (subtotal + livrare)
+                    const shippingElement = document.querySelector('.cart-shipping');
+                    const totalElement = document.querySelector('.cart-total');
+                    
+                    if (shippingElement && totalElement) {
+                        const shipping = parseFloat(shippingElement.getAttribute('data-value'));
+                        totalElement.textContent = (data.subtotal + shipping).toFixed(2) + ' RON';
+                    }
+                }
+            } else {
+                showNotification(data.message, 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showNotification('A apărut o eroare la eliminarea din coș', 'error');
+        });
+    }
+    
+    // Atașează event listeneri pentru butoanele de adăugare în coș
+    document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const productId = this.getAttribute('data-product-id');
+            const quantityInput = document.querySelector(`.quantity-input[data-product-id="${productId}"]`);
+            const quantity = quantityInput ? parseInt(quantityInput.value) : 1;
+            
+            addToCart(productId, quantity);
+        });
+    });
+    
+    // Atașează event listeneri pentru butoanele de cantitate în coș
+    document.querySelectorAll('.qty-btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const productId = this.getAttribute('data-product-id');
+            const action = this.getAttribute('data-action'); // 'increase' sau 'decrease'
+            const qtyInput = document.querySelector(`.qty-input[data-product-id="${productId}"]`);
+            
+            if (qtyInput) {
+                let quantity = parseInt(qtyInput.value);
+                
+                if (action === 'increase') {
+                    quantity += 1;
+                } else if (action === 'decrease') {
+                    quantity = Math.max(1, quantity - 1);
+                }
+                
+                qtyInput.value = quantity;
+                updateCartItem(productId, quantity);
+            }
+        });
+    });
+    
+    // Atașează event listeneri pentru introducerea manuală a cantității
+    document.querySelectorAll('.qty-input').forEach(input => {
+        input.addEventListener('change', function(e) {
+            const productId = this.getAttribute('data-product-id');
+            let quantity = parseInt(this.value);
+            
+            // Asigură-te că cantitatea este cel puțin 1
+            if (isNaN(quantity) || quantity < 1) {
+                quantity = 1;
+                this.value = 1;
+            }
+            
+            updateCartItem(productId, quantity);
+        });
+    });
+    
+    // Atașează event listeneri pentru butoanele de eliminare
+    document.querySelectorAll('.remove-from-cart-btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const productId = this.getAttribute('data-product-id');
+            
+            // Confirmă eliminarea
+            if (confirm('Ești sigur că vrei să elimini acest produs din coș?')) {
+                removeFromCart(productId);
+            }
+        });
+    });
+    
+    // Încarcă contorul de coș la încărcarea paginii
+    fetch('/cart/count/')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                updateCartCounter(data.cart_count);
+            }
+        })
+        .catch(error => {
+            console.error('Error loading cart count:', error);
+        });
+});
+    </script>
 </body>
 </html>
