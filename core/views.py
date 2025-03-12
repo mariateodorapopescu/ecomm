@@ -691,3 +691,28 @@ def get_cart_items(request):
             'cart_items': items,
             'cart_count': sum(item.get('qty', 0) for item in cart.values())
         })
+
+@login_required
+def cart_view(request):
+    """
+    View for displaying the cart page
+    """
+    # Get cart items for the user
+    cart_items = CartOrderItems.objects.filter(
+        order__user=request.user,
+        order__paid_status=False
+    ).select_related('order')
+    
+    # Calculate totals
+    subtotal = sum(float(item.total) for item in cart_items)
+    shipping = 15.00  # Exemplu de cost de livrare fix
+    total = subtotal + shipping
+    
+    context = {
+        'cart_items': cart_items,
+        'subtotal': subtotal,
+        'shipping': shipping,
+        'total': total,
+    }
+    
+    return render(request, 'core/cart.html', context)

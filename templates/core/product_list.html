@@ -144,18 +144,21 @@
                             </div>
                             
                            
-                            <button class="add-to-cart">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                                Adaugă în coș
-                            </button>
-                            <div class="quantity-controls" style="display: none;" data-product-id="{{ product.pid }}">
-                                <button class="quantity-btn decrease">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            <div class="cart-actions">
+                                <button class="add-to-cart" data-product-id="{{ product.pid }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                                    Adaugă în coș
                                 </button>
-                                <span class="quantity">1</span>
-                                <button class="quantity-btn increase">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                                </button>
+                                
+                                <div class="quantity-controls" style="display: none;" data-product-id="{{ product.pid }}">
+                                    <button class="quantity-btn decrease">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                    </button>
+                                    <span class="quantity">1</span>
+                                    <button class="quantity-btn increase">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         </div>
@@ -766,6 +769,28 @@
     }
 </style>
 <style>
+    .cart {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.cart-count {
+    position: absolute;
+    top: -8px;
+    right: -12px;
+    min-width: 18px;
+    height: 18px;
+    background-color: #e55b00;
+    color: white;
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+}
     .cart-actions {
         width: 100%;
     }
@@ -882,47 +907,179 @@
                 }
             });
         });
+        function updateCartBadge(count) {
+    const cartCount = document.querySelector('.cart-count');
+    if (cartCount) {
+        cartCount.textContent = count;
         
-        // Function to add product to cart
-        function addToCart(productId, quantity, addButton) {
-            // Get CSRF token
-            const csrftoken = getCookie('csrftoken');
+        // Optionally add animation effect
+        cartCount.classList.add('cart-updated');
+        setTimeout(() => {
+            cartCount.classList.remove('cart-updated');
+        }, 500);
+    }
+}
+document.addEventListener('DOMContentLoaded', function() {
+    console.log("Cart functionality initializing...");
+    
+    // Check for add-to-cart buttons
+    const addToCartButtons = document.querySelectorAll('.add-to-cart');
+    console.log("Found", addToCartButtons.length, "add-to-cart buttons");
+    
+    // Add event listeners to all add-to-cart buttons
+    addToCartButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
             
-            // Create form data
-            const formData = new FormData();
-            formData.append('product_id', productId);
-            formData.append('action', 'add');
-            formData.append('quantity', quantity);
+            const productCard = this.closest('.product-card');
+            const productId = productCard.getAttribute('data-product-id');
             
-            // Make AJAX request
-            fetch('{% url "core:cart-action" %}', {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': csrftoken
-                },
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Update cart count
-                    updateCartBadge(data.cart_count);
+            console.log("Add to cart clicked for product ID:", productId);
+            
+            // Add to cart
+            addToCart(productId, 1, this);
+        });
+    });
+});
+
+// Make sure we have a getCookie function
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+document.addEventListener('DOMContentLoaded', function() {
+    // Add style for cart count animation
+    const style = document.createElement('style');
+    style.textContent = `
+        .cart-count {
+            transition: transform 0.2s ease;
+        }
+        .cart-updated {
+            transform: scale(1.5);
+            color: #e55b00;
+        }
+    `;
+    document.head.appendChild(style);
+    
+    // Initialize cart count on page load
+    fetch('{% url "core:get-cart-count" %}')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                updateCartBadge(data.cart_count);
+            }
+        })
+        .catch(error => {
+            console.error('Error loading cart count:', error);
+        });
+});
+
+// Fix for missing showNotification function if needed
+function showNotification(message, type = 'success') {
+    // Check if the normal notification function already exists
+    if (typeof window.showNotification !== 'function') {
+        // Creăm elementul de notificare
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.innerText = message;
+        
+        // Adăugăm notificarea în DOM
+        document.body.appendChild(notification);
+        
+        // Afișăm notificarea cu animație
+        setTimeout(() => {
+            notification.classList.add('show');
+        }, 10);
+        
+        // Ștergem notificarea după 3 secunde
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => {
+                notification.remove();
+            }, 300);
+        }, 3000);
+    } else {
+        window.showNotification(message, type);
+    }
+}
+       
+// Improved addToCart function with better error handling
+function addToCart(productId, quantity, button) {
+    console.log("Adding to cart:", productId, "quantity:", quantity);
+    
+    // Get CSRF token
+    const csrftoken = getCookie('csrftoken');
+    
+    // Create form data
+    const formData = new FormData();
+    formData.append('product_id', productId);
+    formData.append('action', 'add');
+    formData.append('quantity', quantity);
+    
+    // Make AJAX request
+    fetch('{% url "core:cart-action" %}', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrftoken
+        },
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Server error: ' + response.status);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            console.log("Add to cart success:", data);
+            
+            // Update cart count
+            updateCartBadge(data.cart_count);
+            
+            // Show quantity controls if they exist
+            const productCard = button.closest('.product-card');
+            if (productCard) {
+                const quantityControls = productCard.querySelector('.quantity-controls');
+                const addButton = productCard.querySelector('.add-to-cart');
+                
+                if (quantityControls && addButton) {
+                    // Update quantity display
+                    const quantityElement = quantityControls.querySelector('.quantity');
+                    if (quantityElement) {
+                        quantityElement.textContent = data.item_quantity || 1;
+                    }
+                    
+                    // Hide add button
+                    addButton.style.display = 'none';
                     
                     // Show quantity controls
-                    showQuantityControls(productId, data.item_quantity);
-                    
-                    // Show success notification
-                    showNotification(data.message, 'success');
-                } else {
-                    // Show error notification
-                    showNotification('Eroare: ' + data.message, 'error');
+                    quantityControls.style.display = 'flex';
                 }
-            })
-            .catch(error => {
-                console.error('Eroare:', error);
-                showNotification('A apărut o eroare. Vă rugăm să încercați din nou.', 'error');
-            });
+            }
+            
+            // Show success notification
+            showNotification(data.message, 'success');
+        } else {
+            console.error("Add to cart error:", data.message);
+            showNotification('Eroare: ' + data.message, 'error');
         }
+    })
+    .catch(error => {
+        console.error('Error adding to cart:', error);
+        showNotification('A apărut o eroare. Vă rugăm să încercați din nou.', 'error');
+    });
+}
         
         // Function to update cart quantity
         function updateCartQuantity(productId, quantity) {
@@ -1303,4 +1460,336 @@ data.products.forEach(product => {
 const productId = productCard.getAttribute('data-product-id');
 console.log('PID transmis:', productId);
 </script>
+<!-- Add this script to the bottom of your product_list.html file, replacing all existing cart JS -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log("Cart functionality initializing...");
+        
+        // Initialize cart count and quantity controls
+        initializeCart();
+        
+        // Add event listeners to all "Add to cart" buttons
+        const addToCartButtons = document.querySelectorAll('.add-to-cart');
+        console.log("Found", addToCartButtons.length, "add-to-cart buttons");
+        
+        addToCartButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const productId = this.getAttribute('data-product-id');
+                console.log("Add to cart clicked for product ID:", productId);
+                
+                // Add to cart and show quantity controls
+                addToCart(productId, 1, this);
+            });
+        });
+        
+        // Add event listeners to quantity buttons
+        document.querySelectorAll('.quantity-btn.increase').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const controls = this.closest('.quantity-controls');
+                const productId = controls.getAttribute('data-product-id');
+                const quantityElement = controls.querySelector('.quantity');
+                let quantity = parseInt(quantityElement.textContent);
+                
+                // Increment quantity
+                quantity++;
+                quantityElement.textContent = quantity;
+                
+                // Update cart
+                updateCartQuantity(productId, quantity);
+            });
+        });
+        
+        document.querySelectorAll('.quantity-btn.decrease').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const controls = this.closest('.quantity-controls');
+                const productId = controls.getAttribute('data-product-id');
+                const quantityElement = controls.querySelector('.quantity');
+                let quantity = parseInt(quantityElement.textContent);
+                
+                // Decrement quantity
+                quantity--;
+                
+                if (quantity <= 0) {
+                    // If quantity is 0 or less, remove item from cart and show add button
+                    removeFromCart(productId, controls);
+                } else {
+                    // Update quantity display
+                    quantityElement.textContent = quantity;
+                    
+                    // Update cart
+                    updateCartQuantity(productId, quantity);
+                }
+            });
+        });
+    });
+    
+    // Function to initialize cart (load cart count and setup quantity controls)
+    function initializeCart() {
+        // Load cart count
+        fetch('{% url "core:get-cart-count" %}')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    updateCartBadge(data.cart_count);
+                }
+            })
+            .catch(error => {
+                console.error('Error loading cart count:', error);
+            });
+        
+        // Initialize quantity controls for items already in cart
+        fetch('{% url "core:get-cart-items" %}')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // For each item in the cart, show quantity controls
+                    data.cart_items.forEach(item => {
+                        if (item.product_id) {
+                            console.log("Setting up quantity controls for product:", item.product_id, "quantity:", item.quantity);
+                            showQuantityControls(item.product_id, item.quantity);
+                        }
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error loading cart items:', error);
+            });
+    }
+    
+    // Function to add product to cart
+    function addToCart(productId, quantity, button) {
+        console.log("Adding to cart:", productId, "quantity:", quantity);
+        
+        // Get CSRF token
+        const csrftoken = getCookie('csrftoken');
+        
+        // Create form data
+        const formData = new FormData();
+        formData.append('product_id', productId);
+        formData.append('action', 'add');
+        formData.append('quantity', quantity);
+        
+        // Make AJAX request
+        fetch('{% url "core:cart-action" %}', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken
+            },
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Server error: ' + response.status);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                console.log("Add to cart success:", data);
+                
+                // Update cart count
+                updateCartBadge(data.cart_count);
+                
+                // Show quantity controls
+                showQuantityControls(productId, data.item_quantity || 1);
+                
+                // Show success notification
+                showNotification(data.message, 'success');
+            } else {
+                console.error("Add to cart error:", data.message);
+                showNotification('Eroare: ' + data.message, 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error adding to cart:', error);
+            showNotification('A apărut o eroare. Vă rugăm să încercați din nou.', 'error');
+        });
+    }
+    
+    // Function to update cart quantity
+    function updateCartQuantity(productId, quantity) {
+        console.log("Updating cart quantity:", productId, "quantity:", quantity);
+        
+        // Get CSRF token
+        const csrftoken = getCookie('csrftoken');
+        
+        // Create form data
+        const formData = new FormData();
+        formData.append('product_id', productId);
+        formData.append('action', 'update');
+        formData.append('quantity', quantity);
+        
+        // Make AJAX request
+        fetch('{% url "core:cart-action" %}', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Update cart count
+                updateCartBadge(data.cart_count);
+                
+                // Show success notification
+                showNotification(data.message, 'success');
+            } else {
+                // Show error notification
+                showNotification('Eroare: ' + data.message, 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error updating cart:', error);
+            showNotification('A apărut o eroare. Vă rugăm să încercați din nou.', 'error');
+        });
+    }
+    
+    // Function to remove item from cart
+    function removeFromCart(productId, controls) {
+        console.log("Removing from cart:", productId);
+        
+        // Get CSRF token
+        const csrftoken = getCookie('csrftoken');
+        
+        // Create form data
+        const formData = new FormData();
+        formData.append('product_id', productId);
+        formData.append('action', 'remove');
+        
+        // Make AJAX request
+        fetch('{% url "core:cart-action" %}', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Update cart count
+                updateCartBadge(data.cart_count);
+                
+                // Show add to cart button
+                hideQuantityControls(productId);
+                
+                // Show success notification
+                showNotification(data.message, 'success');
+            } else {
+                // Show error notification
+                showNotification('Eroare: ' + data.message, 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error removing from cart:', error);
+            showNotification('A apărut o eroare. Vă rugăm să încercați din nou.', 'error');
+        });
+    }
+    
+    // Function to show quantity controls
+    function showQuantityControls(productId, quantity) {
+        console.log("Showing quantity controls for:", productId, "quantity:", quantity);
+        
+        // Find all product cards with this ID (might appear multiple times on page)
+        document.querySelectorAll(`.product-card[data-product-id="${productId}"]`).forEach(card => {
+            const addButton = card.querySelector('.add-to-cart');
+            const quantityControls = card.querySelector('.quantity-controls');
+            
+            if (addButton && quantityControls) {
+                // Update quantity display
+                const quantityElement = quantityControls.querySelector('.quantity');
+                if (quantityElement) {
+                    quantityElement.textContent = quantity;
+                }
+                
+                // Hide add button
+                addButton.style.display = 'none';
+                
+                // Show quantity controls
+                quantityControls.style.display = 'flex';
+            }
+        });
+    }
+    
+    // Function to hide quantity controls and show add button
+    function hideQuantityControls(productId) {
+        console.log("Hiding quantity controls for:", productId);
+        
+        // Find all product cards with this ID
+        document.querySelectorAll(`.product-card[data-product-id="${productId}"]`).forEach(card => {
+            const addButton = card.querySelector('.add-to-cart');
+            const quantityControls = card.querySelector('.quantity-controls');
+            
+            if (addButton && quantityControls) {
+                // Hide quantity controls
+                quantityControls.style.display = 'none';
+                
+                // Show add button
+                addButton.style.display = 'block';
+            }
+        });
+    }
+    
+    // Function to update cart count in header
+    function updateCartBadge(count) {
+        const cartCount = document.querySelector('.cart-count');
+        if (cartCount) {
+            cartCount.textContent = count;
+            
+            // Add animation effect
+            cartCount.classList.add('cart-updated');
+            setTimeout(() => {
+                cartCount.classList.remove('cart-updated');
+            }, 500);
+        }
+    }
+    
+    // Function to show notification
+    function showNotification(message, type = 'success') {
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.innerText = message;
+        
+        // Add to DOM
+        document.body.appendChild(notification);
+        
+        // Show with animation
+        setTimeout(() => {
+            notification.classList.add('show');
+        }, 10);
+        
+        // Remove after delay
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => {
+                notification.remove();
+            }, 300);
+        }, 3000);
+    }
+    
+    // Function to get CSRF token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    </script>
 {% endblock content %}

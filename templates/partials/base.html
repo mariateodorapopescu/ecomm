@@ -64,74 +64,22 @@
             $(this).remove();
         });
     }, 3000);
+    
 </script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Initialize cart count on page load
-        updateCartCount();
+   // Function to update cart count
+function updateCartCount(count) {
+    const cartCountElement = document.querySelector('.cart-count');
+    if (cartCountElement) {
+        cartCountElement.textContent = count;
         
-        // Add event listeners to all "Add to cart" buttons
-        const addToCartButtons = document.querySelectorAll('.add-to-cart');
-        addToCartButtons.forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                const productCard = this.closest('.product-card');
-                const productId = productCard.getAttribute('data-product-id');
-                
-                addToCart(productId);
-            });
-        });
-        
-        // Function to add product to cart
-        function addToCart(productId) {
-            // Get CSRF token
-            const csrftoken = getCookie('csrftoken');
-            
-            // Create form data
-            const formData = new FormData();
-            formData.append('product_id', productId);
-            formData.append('action', 'add');
-            
-            // Make AJAX request
-            fetch('{% url "core:cart-action" %}', {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': csrftoken
-                },
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Update cart count
-                    updateCartBadge(data.cart_count);
-                    
-                    // Show success notification
-                    showNotification(data.message, 'success');
-                } else {
-                    // Show error notification
-                    showNotification('Eroare: ' + data.message, 'error');
-                }
-            })
-            .catch(error => {
-                console.error('Eroare:', error);
-                showNotification('A apărut o eroare. Vă rugăm să încercați din nou.', 'error');
-            });
-        }
-        
-        // Function to update cart count from server
-        function updateCartCount() {
-            fetch('{% url "core:get-cart-count" %}')
-            .then(response => response.json())
-            .then(data => {
-                updateCartBadge(data.cart_count);
-            })
-            .catch(error => {
-                console.error('Eroare la obținerea numărului de produse din coș:', error);
-            });
-        }
-        
+        // Add animation effect
+        cartCountElement.classList.add('cart-updated');
+        setTimeout(() => {
+            cartCountElement.classList.remove('cart-updated');
+        }, 500);
+    }
+}
         // Function to update cart badge in UI
         function updateCartBadge(count) {
             const cartCount = document.querySelector('.cart-count');
