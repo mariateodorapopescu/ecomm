@@ -20,7 +20,7 @@ from django.urls import path, include
 from django.conf import settings # it accesses settings.py from upper
 from django.conf.urls.static import static
 
-from core.views import index, category_detail, category_list
+from core.views import index, category_detail, category_list, cart_action, cart_view, get_cart_count, get_cart_items
 urlpatterns = [
     path('admin/', admin.site.urls),
     # path("", index)
@@ -29,7 +29,12 @@ urlpatterns = [
     path('', include('core.urls')),
     path('', index, name='index'),
     path('categories/', category_list, name='category_list'),  # Verifică acest nume
-path('category/<str:category_id>/', category_detail, name='category_detail'),
+    path('category/<str:category_id>/', category_detail, name='category_detail'),
+     path('cart/action/', cart_action, name='cart_action'),
+    path('cart/items/', get_cart_items, name='get_cart_items'),
+    path('cart/count/', get_cart_count, name='get_cart_count'),
+    path('cart/', cart_view, name='cart_view'),
+
 ]
 
 # all thr static files are stored in teh static directory in root directory

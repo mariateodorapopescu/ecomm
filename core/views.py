@@ -454,22 +454,6 @@ def get_wishlist(request):
         'products': products
     })
 
-def get_cart_count(request):
-    """Get the number of items in the user's cart"""
-    if request.user.is_authenticated:
-        # For logged in users, get from database
-        cart_items = CartOrderItems.objects.filter(order__user=request.user, order__paid_status=False)
-        cart_count = sum(item.qty for item in cart_items)
-    else:
-        # For anonymous users, get from session
-        cart = request.session.get('cart', {})
-        cart_count = sum(item.get('qty', 0) for item in cart.values())
-    
-    return JsonResponse({
-        'success': True,
-        'cart_count': cart_count
-    })
-
 @login_required
 def cart_action(request):
     """Add, remove, or update cart items"""
@@ -664,6 +648,22 @@ def get_cart_items(request):
             'cart_items': items,
             'cart_count': sum(item.get('qty', 0) for item in cart.values())
         })
+
+def get_cart_count(request):
+    """Get the number of items in the user's cart"""
+    if request.user.is_authenticated:
+        # For logged in users, get from database
+        cart_items = CartOrderItems.objects.filter(order__user=request.user, order__paid_status=False)
+        cart_count = sum(item.qty for item in cart_items)
+    else:
+        # For anonymous users, get from session
+        cart = request.session.get('cart', {})
+        cart_count = sum(item.get('qty', 0) for item in cart.values())
+    
+    return JsonResponse({
+        'success': True,
+        'cart_count': cart_count
+    })
 
 @login_required
 def cart_view(request):

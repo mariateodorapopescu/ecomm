@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Function to update cart counter
 function updateCartCounter() {
-    fetch('{% url "core:get-cart-count" %}')
+    fetch('{% url "core:get_cart_count" %}')
         .then(response => response.json())
         .then(data => {
             if (data.success) {

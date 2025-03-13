@@ -28,11 +28,6 @@
                     <option value="popular" {% if current_sort == 'popular' %}selected{% endif %}>Cele mai populare</option>
                 </select>
             </div>
-            
-            <!-- <button id="filter-toggle" class="filter-toggle">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
-                Filtrare
-            </button> -->
         </div>
         <div class="search-results-info">
             <p>{{ products.paginator.count }} produse găsite</p>
@@ -41,58 +36,57 @@
             {% endif %}
         </div>
         <div class="products-grid-container">
-    <div class="filters-sidebar" id="filters-sidebar">
-        <form id="filter-form" method="get" action="{% url 'core:product-list' %}">
-            <input type="hidden" name="sort" id="sort-input" value="{{ current_sort }}">
-            
-            <div class="filter-block">
-                <h3>Interval de preț</h3>
-                <div class="price-range">
-                    <input type="range" min="0" max="1000" value="{{ current_price|default:500 }}" class="slider" id="price-range" name="price">
-                    <div class="price-labels">
-                        <span>0 RON</span>
-                        <span id="price-value">{{ current_price|default:500 }} RON</span>
-                        <span>1000 RON</span>
+            <div class="filters-sidebar" id="filters-sidebar">
+                <form id="filter-form" method="get" action="{% url 'core:product-list' %}">
+                    <input type="hidden" name="sort" id="sort-input" value="{{ current_sort }}">
+                    
+                    <div class="filter-block">
+                        <h3>Interval de preț</h3>
+                        <div class="price-range">
+                            <input type="range" min="0" max="1000" value="{{ current_price|default:500 }}" class="slider" id="price-range" name="price">
+                            <div class="price-labels">
+                                <span>0 RON</span>
+                                <span id="price-value">{{ current_price|default:500 }} RON</span>
+                                <span>1000 RON</span>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                    
+                    <div class="filter-block">
+                        <h3>Categorie</h3>
+                        <div class="checkbox-group">
+                            {% for category in categories %}
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="category" value="{{ category.id }}" {% if category.id|stringformat:"i" in selected_categories %}checked{% endif %}>
+                                <span class="checkbox-custom"></span>
+                                {{ category.title }}
+                            </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <div class="filter-block">
+                        <h3>În stoc</h3>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="in_stock" value="true" {% if show_in_stock %}checked{% endif %}>
+                                <span class="checkbox-custom"></span>
+                                Doar produse în stoc
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-actions">
+                        <button type="submit" class="btn-apply">Aplică filtrele</button>
+                        <a href="{% url 'core:product-list' %}" class="btn-reset">Resetează</a>
+                    </div>
+                </form>
             </div>
-            
-            <div class="filter-block">
-                <h3>Categorie</h3>
-                <div class="checkbox-group">
-                    {% for category in categories %}
-                    <label class="checkbox-label">
-                        <input type="checkbox" name="category" value="{{ category.id }}" {% if category.id|stringformat:"i" in selected_categories %}checked{% endif %}>
-                        <span class="checkbox-custom"></span>
-                        {{ category.title }}
-                    </label>
-                    {% endfor %}
-                </div>
-            </div>
-            
-            <div class="filter-block">
-                <h3>În stoc</h3>
-                <div class="checkbox-group">
-                    <label class="checkbox-label">
-                        <input type="checkbox" name="in_stock" value="true" {% if show_in_stock %}checked{% endif %}>
-                        <span class="checkbox-custom"></span>
-                        Doar produse în stoc
-                    </label>
-                </div>
-            </div>
-            
-            <div class="filter-actions">
-                <button type="submit" class="btn-apply">Aplică filtrele</button>
-                <a href="{% url 'core:product-list' %}" class="btn-reset">Resetează</a>
-            </div>
-        </form>
-    </div>
             
             <div class="products-grid">
                 {% if products %}
                     {% for product in products %}
-                    <!-- Asigură-te că fiecare card de produs are acest atribut -->
-<div class="product-card" data-product-id="{{ product.pid }}">
+                    <div class="product-card" data-product-id="{{ product.pid }}">
                         <div class="product-badge {% if product.get_precentage > 0 %}sale{% elif product.featured %}featured{% endif %}">
                             {% if product.get_precentage > 0 %}
                                 -{{ product.get_precentage|floatformat:0 }}%
@@ -143,8 +137,8 @@
                                 {% endif %}
                             </div>
                             
-                           
                             <div class="cart-actions">
+                                {% csrf_token %}
                                 <button class="add-to-cart" data-product-id="{{ product.pid }}">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
                                     Adaugă în coș
@@ -161,7 +155,6 @@
                                 </div>
                             </div>
                         </div>
-                        </div>
                     </div>
                     {% endfor %}
                 {% else %}
@@ -175,26 +168,26 @@
                 {% endif %}
             </div>
             {% if products.has_other_pages %}
-<div class="pagination">
-    {% if products.has_previous %}
-        <a href="?page=1{% if query_string %}&{{ query_string }}{% endif %}" class="page-link">&laquo; Prima</a>
-        <a href="?page={{ products.previous_page_number }}{% if query_string %}&{{ query_string }}{% endif %}" class="page-link">&lsaquo; Înapoi</a>
-    {% endif %}
-    
-    {% for num in products.paginator.page_range %}
-        {% if products.number == num %}
-            <span class="page-link active">{{ num }}</span>
-        {% elif num > products.number|add:'-3' and num < products.number|add:'3' %}
-            <a href="?page={{ num }}{% if query_string %}&{{ query_string }}{% endif %}" class="page-link">{{ num }}</a>
-        {% endif %}
-    {% endfor %}
-    
-    {% if products.has_next %}
-        <a href="?page={{ products.next_page_number }}{% if query_string %}&{{ query_string }}{% endif %}" class="page-link">Înainte &rsaquo;</a>
-        <a href="?page={{ products.paginator.num_pages }}{% if query_string %}&{{ query_string }}{% endif %}" class="page-link">Ultima &raquo;</a>
-    {% endif %}
-</div>
-{% endif %}
+            <div class="pagination">
+                {% if products.has_previous %}
+                    <a href="?page=1{% if query_string %}&{{ query_string }}{% endif %}" class="page-link">&laquo; Prima</a>
+                    <a href="?page={{ products.previous_page_number }}{% if query_string %}&{{ query_string }}{% endif %}" class="page-link">&lsaquo; Înapoi</a>
+                {% endif %}
+                
+                {% for num in products.paginator.page_range %}
+                    {% if products.number == num %}
+                        <span class="page-link active">{{ num }}</span>
+                    {% elif num > products.number|add:'-3' and num < products.number|add:'3' %}
+                        <a href="?page={{ num }}{% if query_string %}&{{ query_string }}{% endif %}" class="page-link">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if products.has_next %}
+                    <a href="?page={{ products.next_page_number }}{% if query_string %}&{{ query_string }}{% endif %}" class="page-link">Înainte &rsaquo;</a>
+                    <a href="?page={{ products.paginator.num_pages }}{% if query_string %}&{{ query_string }}{% endif %}" class="page-link">Ultima &raquo;</a>
+                {% endif %}
+            </div>
+            {% endif %}
         </div>
     </div>
 </section>
@@ -721,6 +714,76 @@
         margin-bottom: 20px;
     }
     
+    /* Layout container pentru filtre + produse */
+.products-grid-container {
+    display: grid;
+    grid-template-columns: 250px 1fr; /* Lățimea sidebar-ului și restul spațiului */
+    gap: 20px;
+    align-items: start;
+}
+
+/* Stiluri pentru sidebar filtre */
+.filters-sidebar {
+    background-color: white;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 20px; /* Menținem sidebar-ul la scroll */
+}
+
+/* Fă elementele din sidebar mai compacte */
+.filter-block {
+    margin-bottom: 15px;
+}
+
+.filter-block h3 {
+    font-size: 14px;
+    margin: 0 0 10px 0;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #eee;
+}
+
+.checkbox-group {
+    gap: 6px;
+}
+
+.filter-actions {
+    gap: 8px;
+}
+
+.checkbox-label {
+    font-size: 13px;
+}
+
+/* Controlul de sortare în sidebar */
+.filter-section {
+    margin-bottom: 15px;
+}
+
+.sort-select {
+    width: 100%;
+    padding: 6px 10px;
+    font-size: 13px;
+}
+
+/* Responsive design */
+@media (max-width: 992px) {
+    .products-grid-container {
+        grid-template-columns: 1fr; /* O singură coloană pe ecrane mici */
+    }
+    
+    .filters-sidebar {
+        margin-bottom: 20px;
+        position: static; /* Elimină sticky pe mobil */
+    }
+}
+
+/* Main content section */
+.main-content {
+    width: 100%;
+}
+
     /* Responsive */
     @media (max-width: 992px) {
         .products-grid-container {
@@ -857,6 +920,13 @@
     
     .notification.warning {
         border-left: 4px solid #FFC107;
+    }
+
+    /* Cart Styles */
+    .cart {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
     }
 
     /* Cart Styles */
@@ -1276,7 +1346,7 @@
         // Function to load cart data
         function loadCartData() {
             // Load cart count for badge
-            fetch('{% url "core:get-cart-count" %}')
+            fetch('{% url "core:get_cart_count" %}')
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
@@ -1288,7 +1358,7 @@
                 });
             
             // Load cart items and show quantity controls
-            fetch('{% url "core:get-cart-items" %}')
+            fetch('{% url "core:get_cart_items" %}')
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
@@ -1307,54 +1377,58 @@
         }
         
         // Function to add product to cart
-        function addToCart(productId, quantity, button) {
-            console.log("Adding to cart:", productId, "quantity:", quantity);
-            
-            // Get CSRF token
-            const csrftoken = getCookie('csrftoken');
-            
-            // Create form data
-            const formData = new FormData();
-            formData.append('product_id', productId);
-            formData.append('action', 'add');
-            formData.append('quantity', quantity);
-            
-            // Make AJAX request
-            fetch('{% url "core:cart-action" %}', {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': csrftoken
-                },
-                body: formData
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Server error: ' + response.status);
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.success) {
-                    console.log("Add to cart success:", data);
-                    
-                    // Update cart count
-                    updateCartBadge(data.cart_count);
-                    
-                    // Show quantity controls
-                    showQuantityControls(productId, data.item_quantity || 1);
-                    
-                    // Show success notification
-                    showNotification(data.message, 'success');
-                } else {
-                    console.error("Add to cart error:", data.message);
-                    showNotification('Eroare: ' + data.message, 'error');
-                }
-            })
-            .catch(error => {
-                console.error('Error adding to cart:', error);
-                showNotification('A apărut o eroare. Vă rugăm să încercați din nou.', 'error');
-            });
+        // Function to add product to cart
+function addToCart(productId, quantity, button) {
+    console.log("Adding to cart:", productId, "quantity:", quantity);
+    
+    // Get CSRF token
+    const csrftoken = getCookie('csrftoken');
+    
+    // Create form data
+    const formData = new FormData();
+    formData.append('product_id', productId);
+    formData.append('action', 'add');
+    formData.append('quantity', quantity);
+    
+    // Make AJAX request
+    fetch('/cart/action/', {  // Folosește calea directă în loc de URL tag
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrftoken,
+            'X-Requested-With': 'XMLHttpRequest'  // Adaugă acest header
+        },
+        body: formData
+    })
+    .then(response => {
+        console.log("Response status:", response.status);  // Adaugă acest log
+        if (!response.ok) {
+            throw new Error('Server error: ' + response.status);
         }
+        return response.json();
+    })
+    .then(data => {
+        console.log("Response data:", data);  // Adaugă acest log
+        if (data.success) {
+            console.log("Add to cart success:", data);
+            
+            // Update cart count
+            updateCartBadge(data.cart_count);
+            
+            // Show quantity controls
+            showQuantityControls(productId, data.item_quantity || 1);
+            
+            // Show success notification
+            showNotification(data.message, 'success');
+        } else {
+            console.error("Add to cart error:", data.message);
+            showNotification('Eroare: ' + data.message, 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error adding to cart:', error);
+        showNotification('A apărut o eroare. Vă rugăm să încercați din nou.', 'error');
+    });
+}
         
         // Function to update cart quantity
         function updateCartQuantity(productId, quantity) {
@@ -1370,7 +1444,7 @@
             formData.append('quantity', quantity);
             
             // Make AJAX request
-            fetch('{% url "core:cart-action" %}', {
+            fetch('{% url "core:cart_action" %}', {
                 method: 'POST',
                 headers: {
                     'X-CSRFToken': csrftoken
@@ -1409,7 +1483,7 @@
             formData.append('action', 'remove');
             
             // Make AJAX request
-            fetch('{% url "core:cart-action" %}', {
+            fetch('{% url "core:cart_action" %}', {
                 method: 'POST',
                 headers: {
                     'X-CSRFToken': csrftoken
